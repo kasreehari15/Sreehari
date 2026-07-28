@@ -419,100 +419,6 @@
   }
 
   /* ══════════════════════════════════════════════════════════
-     7b. Mascot — a stylised avatar of Sreehari that blinks,
-         breathes, follows the pointer and tilts in 3D.
-     ══════════════════════════════════════════════════════════ */
-  function initMascot() {
-    const mascot = $("#mascot");
-    if (!mascot) return;
-
-    const tilt = $("#mascotTilt");
-    const head = $("#avHead");
-    const figure = $("#avFigure");
-    const lids = $$(".mascot .lid");
-    const eyeballs = $$(".mascot .eyeball");
-    const bits = $$(".mascot__bits .bit");
-    const brows = [$("#browL"), $("#browR")].filter(Boolean);
-
-    /* the SVG is scaled by CSS, so animate in the SVG's own user units */
-    gsap.set(lids, { y: -19 });
-
-    if (REDUCED) return;
-
-    /* breathing: the body drifts, the head drifts a touch more */
-    gsap.to(figure, { y: 5, duration: 2.6, repeat: -1, yoyo: true, ease: "sine.inOut" });
-    gsap.to(head, { y: -4, rotation: 0.7, transformOrigin: "160px 250px", duration: 3.4, repeat: -1, yoyo: true, ease: "sine.inOut" });
-
-    /* floating code bits, each on its own rhythm */
-    bits.forEach((bit, i) => {
-      gsap.to(bit, {
-        y: i % 2 ? 14 : -14,
-        x: i === 1 ? -8 : 6,
-        duration: 3 + i * 0.7,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: i * 0.4
-      });
-    });
-
-    /* blinking — irregular, occasionally a double blink */
-    const blink = () => {
-      const tl = gsap.timeline({
-        onComplete: () => gsap.delayedCall(gsap.utils.random(2.4, 6.5), blink)
-      });
-      tl.to(lids, { y: 0, duration: 0.07, ease: "power2.in" })
-        .to(lids, { y: -19, duration: 0.11, ease: "power2.out" });
-
-      if (Math.random() < 0.28) {
-        tl.to(lids, { y: 0, duration: 0.07, ease: "power2.in" }, "+=0.1")
-          .to(lids, { y: -19, duration: 0.11, ease: "power2.out" });
-      }
-    };
-    gsap.delayedCall(1.6, blink);
-
-    /* pointer tracking: eyes, 3D head tilt, and parallax on the bits */
-    if (!window.matchMedia("(pointer: fine)").matches) return;
-
-    const eyeX = gsap.quickTo(eyeballs, "x", { duration: 0.7, ease: "power3" });
-    const eyeY = gsap.quickTo(eyeballs, "y", { duration: 0.7, ease: "power3" });
-    const rotY = gsap.quickTo(tilt, "rotationY", { duration: 1, ease: "power3" });
-    const rotX = gsap.quickTo(tilt, "rotationX", { duration: 1, ease: "power3" });
-
-    window.addEventListener(
-      "mousemove",
-      (e) => {
-        const box = mascot.getBoundingClientRect();
-        if (!box.width) return;
-        const cx = box.left + box.width / 2;
-        const cy = box.top + box.height * 0.42;
-
-        /* -1 … 1 either side of the mascot */
-        const dx = gsap.utils.clamp(-1, 1, (e.clientX - cx) / (window.innerWidth / 2));
-        const dy = gsap.utils.clamp(-1, 1, (e.clientY - cy) / (window.innerHeight / 2));
-
-        eyeX(dx * 4.5);
-        eyeY(dy * 3);
-        rotY(dx * 13);
-        rotX(-dy * 9);
-      },
-      { passive: true }
-    );
-
-    /* he perks up when you point at him */
-    mascot.addEventListener("mouseenter", () => {
-      gsap.to("#avMouth", { attr: { d: "M142 214q18 17 36 0" }, duration: 0.35, ease: "back.out(2)" });
-      gsap.to(brows, { y: -3, duration: 0.35, ease: "back.out(2)" });
-      gsap.to(tilt, { scale: 1.03, duration: 0.5, ease: "power3.out" });
-    });
-    mascot.addEventListener("mouseleave", () => {
-      gsap.to("#avMouth", { attr: { d: "M144 216q16 12 32 0" }, duration: 0.4 });
-      gsap.to(brows, { y: 0, duration: 0.4 });
-      gsap.to(tilt, { scale: 1, duration: 0.5, ease: "power3.out" });
-    });
-  }
-
-  /* ══════════════════════════════════════════════════════════
      7c. 3D — rotating cube, card tilt, depth on scroll
      ══════════════════════════════════════════════════════════ */
   function init3D() {
@@ -879,7 +785,11 @@
 
     const ring = $(".cursor");
     const dot = $(".cursor-dot");
+    const label = $("#cursorLabel");
     if (!ring || !dot) return;
+
+    /* only hide the native cursor once ours is definitely running */
+    document.body.classList.add("has-cursor");
 
     let shown = false;
     const ringX = gsap.quickTo(ring, "x", { duration: 0.5, ease: "power3" });
@@ -903,14 +813,44 @@
       { passive: true }
     );
 
-    $$("a, button, .card, .panel").forEach((el) => {
-      el.addEventListener("mouseenter", () => {
-        ring.classList.add("is-active");
-        gsap.to(ring, { scale: 1.7, duration: 0.35 });
-      });
-      el.addEventListener("mouseleave", () => {
-        ring.classList.remove("is-active");
-        gsap.to(ring, { scale: 1, duration: 0.35 });
+    /* press feedback */
+    window.addEventListener("mousedown", () => gsap.to(ring, { scale: 0.82, duration: 0.2 }));
+    window.addEventListener("mouseup", () => gsap.to(ring, { scale: ring.dataset.scale || 1, duration: 0.25 }));
+
+    const setRing = (scale, hover) => {
+      ring.dataset.scale = scale;
+      ring.classList.toggle("is-hover", hover);
+      gsap.to(ring, { scale, duration: 0.35, ease: "power3.out" });
+    };
+
+    /* plain interactive elements just grow the ring */
+    $$("a, button").forEach((el) => {
+      el.addEventListener("mouseenter", () => setRing(1.6, true));
+      el.addEventListener("mouseleave", () => setRing(1, false));
+    });
+
+    /* richer targets get a word inside the ring */
+    const LABELLED = [
+      [".btn", "go"],
+      [".link-big", "open"],
+      [".card", "tilt"],
+      [".terminal", "tilt"],
+      [".cube-stage", "spin"],
+      [".panel", "read"]
+    ];
+    LABELLED.forEach(([selector, text]) => {
+      $$(selector).forEach((el) => {
+        el.addEventListener("mouseenter", () => {
+          if (label) label.textContent = text;
+          ring.classList.add("is-label");
+          dot.classList.add("is-hidden");
+          setRing(1.9, false);
+        });
+        el.addEventListener("mouseleave", () => {
+          ring.classList.remove("is-label");
+          dot.classList.remove("is-hidden");
+          setRing(1, false);
+        });
       });
     });
 
@@ -930,7 +870,6 @@
         yTo(0);
       });
     });
-
   }
 
   /* ══════════════════════════════════════════════════════════
@@ -1055,7 +994,6 @@
     initTimeline();
     initPointer();
     initCanvas();
-    initMascot();
     init3D();
 
     runPreloader().then(() => {
