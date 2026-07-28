@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Sreehari — B.Tech CSE Student &amp; Aspiring Software Engineer</title>
+<meta name="description" content="Portfolio of Sreehari — B.Tech Computer Science student, aspiring software engineer, and AI &amp; Machine Learning enthusiast." />
+<meta name="theme-color" content="#0b0e18" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Sreehari — Aspiring Software Engineer" />
+<meta property="og:description" content="B.Tech CSE student building things with Python, exploring AI &amp; Machine Learning." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#128187;</text></svg>" />
+
+<noscript>
+  <style>
+    .preloader, .cursor, .cursor-dot { display: none !important; }
+    body.is-loading { overflow: auto !important; height: auto !important; }
+    [data-reveal] { opacity: 1 !important; transform: none !important; }
+    .hscroll { overflow-x: auto !important; }
+  </style>
+</noscript>
+</head>
+
+<body class="is-loading">
+
+<!-- ────────────────────────── preloader ────────────────────────── -->
+<div class="preloader" id="preloader">
+  <div class="preloader__inner">
+    <div class="preloader__label"><span class="mono">initialising</span></div>
+    <div class="preloader__word" aria-hidden="true">SREEHARI</div>
+    <div class="preloader__bar"><i></i></div>
+    <div class="preloader__count mono"><span id="preloaderCount">0</span>%</div>
+  </div>
+</div>
+
+<!-- ────────────────────────── chrome ────────────────────────── -->
+<div class="scroll-progress" aria-hidden="true"><i></i></div>
+<div class="cursor" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#home" data-scroll-to="#home">
+    <span class="nav__mark">&lt;/&gt;</span>
+    <span class="nav__name">sreehari</span>
+  </a>
+
+  <nav class="nav__links" aria-label="Primary">
+    <a href="#about"    data-scroll-to="#about"><span class="mono">01</span> About</a>
+    <a href="#stack"    data-scroll-to="#stack"><span class="mono">02</span> Stack</a>
+    <a href="#learning" data-scroll-to="#learning"><span class="mono">03</span> Learning</a>
+    <a href="#goals"    data-scroll-to="#goals"><span class="mono">04</span> Goals</a>
+    <a href="#contact"  data-scroll-to="#contact" class="nav__cta">Contact</a>
+  </nav>
+
+  <button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+    <span></span><span></span>
+  </button>
+</header>
+
+<div class="menu" id="menu" aria-hidden="true">
+  <div class="menu__inner">
+    <a href="#home"     data-scroll-to="#home"><span class="mono">00</span> Home</a>
+    <a href="#about"    data-scroll-to="#about"><span class="mono">01</span> About</a>
+    <a href="#stack"    data-scroll-to="#stack"><span class="mono">02</span> Stack</a>
+    <a href="#learning" data-scroll-to="#learning"><span class="mono">03</span> Learning</a>
+    <a href="#goals"    data-scroll-to="#goals"><span class="mono">04</span> Goals</a>
+    <a href="#stats"    data-scroll-to="#stats"><span class="mono">05</span> Stats</a>
+    <a href="#contact"  data-scroll-to="#contact"><span class="mono">06</span> Contact</a>
+  </div>
+</div>
+
+<main id="main">
+
+  <!-- ────────────────────────── hero ────────────────────────── -->
+  <section class="hero" id="home">
+    <canvas class="hero__canvas" id="neuralCanvas" aria-hidden="true"></canvas>
+    <div class="hero__glow" aria-hidden="true"></div>
+
+    <div class="hero__inner">
+      <p class="hero__hi" data-reveal>
+        <span class="wave">👋</span> Hi, I'm
+      </p>
+
+      <h1 class="hero__title" data-split="chars">Sreehari</h1>
+
+      <div class="hero__roles">
+        <span class="mono hero__prompt">&gt;</span>
+        <span class="hero__rotator" id="rotator" aria-live="polite"></span>
+        <span class="hero__caret" aria-hidden="true"></span>
+      </div>
+
+      <p class="hero__blurb" data-reveal>
+        B.Tech Computer Science student learning in public — writing Python,
+        chasing fundamentals, and building toward a career in
+        <em>Artificial Intelligence</em> &amp; <em>Machine Learning</em>.
+      </p>
+
+      <div class="hero__actions" data-reveal>
+        <a class="btn btn--primary magnetic" href="#contact" data-scroll-to="#contact">
+          <span>Get in touch</span>
+        </a>
+        <a class="btn btn--ghost magnetic" href="#about" data-scroll-to="#about">
+          <span>About me</span>
+        </a>
+      </div>
+    </div>
+
+    <a class="hero__scroll" href="#about" data-scroll-to="#about" aria-label="Scroll to about">
+      <span class="mono">scroll</span>
+      <i></i>
+    </a>
+  </section>
+
+  <!-- ────────────────────────── marquee ────────────────────────── -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track" id="marqueeTrack">
+      <div class="marquee__group">
+        <span>Python</span><i>✳</i><span>Data Structures</span><i>✳</i><span>Algorithms</span><i>✳</i>
+        <span>OOP</span><i>✳</i><span>Artificial Intelligence</span><i>✳</i><span>Machine Learning</span><i>✳</i>
+        <span>Open Source</span><i>✳</i><span>Always Learning</span><i>✳</i>
+      </div>
+      <div class="marquee__group">
+        <span>Python</span><i>✳</i><span>Data Structures</span><i>✳</i><span>Algorithms</span><i>✳</i>
+        <span>OOP</span><i>✳</i><span>Artificial Intelligence</span><i>✳</i><span>Machine Learning</span><i>✳</i>
+        <span>Open Source</span><i>✳</i><span>Always Learning</span><i>✳</i>
+      </div>
+    </div>
+  </div>
+
+  <!-- ────────────────────────── about ────────────────────────── -->
+  <section class="section about" id="about">
+    <div class="wrap about__grid">
+
+      <div class="about__sticky">
+        <div class="terminal" data-reveal>
+          <div class="terminal__bar">
+            <i></i><i></i><i></i>
+            <span class="mono">sreehari — python3</span>
+          </div>
+          <pre class="terminal__body mono"><code><span class="c-dim">>>> </span><span class="c-key">class</span> <span class="c-fn">Sreehari</span>:
+<span class="c-dim">... </span>    role      = <span class="c-str">"B.Tech CSE Student"</span>
+<span class="c-dim">... </span>    focus     = [<span class="c-str">"AI"</span>, <span class="c-str">"ML"</span>, <span class="c-str">"DSA"</span>]
+<span class="c-dim">... </span>    language  = <span class="c-str">"Python"</span>
+<span class="c-dim">... </span>    curiosity = <span class="c-num">float</span>(<span class="c-str">"inf"</span>)
+<span class="c-dim">... </span>
+<span class="c-dim">... </span>    <span class="c-key">def</span> <span class="c-fn">today</span>(self):
+<span class="c-dim">... </span>        <span class="c-key">return</span> <span class="c-str">"build → break → learn → repeat"</span>
+<span class="c-dim">>>> </span>Sreehari().today()
+<span class="c-str">'build → break → learn → repeat'</span>
+<span class="c-dim">>>> </span><span class="term-caret">▍</span></code></pre>
+        </div>
+      </div>
+
+      <div class="about__content">
+        <p class="eyebrow mono" data-reveal><span>01</span> — About me</p>
+
+        <h2 class="h2" data-split="lines">
+          Every expert was once a beginner. I'm early in the story, and writing it one commit at a time.
+        </h2>
+
+        <div class="about__cols">
+          <p data-reveal>
+            I'm a Computer Science &amp; Engineering undergrad who fell for the moment code
+            stops being syntax and starts being <em>a way of thinking</em>. Most days that
+            looks like Python, a problem I can't solve yet, and one more attempt.
+          </p>
+          <p data-reveal>
+            Right now I'm going deep on fundamentals — data structures, algorithms and
+            object-oriented design — while pulling on the thread of AI and machine learning
+            that got me curious in the first place.
+          </p>
+        </div>
+
+        <ul class="facts" data-reveal>
+          <li><span class="mono">🎓</span> B.Tech Computer Science &amp; Engineering</li>
+          <li><span class="mono">💻</span> Aspiring Software Engineer</li>
+          <li><span class="mono">🤖</span> Passionate about Artificial Intelligence</li>
+          <li><span class="mono">🐍</span> Learning Python &amp; CS fundamentals</li>
+          <li><span class="mono">🌱</span> Always curious, always building</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────────────────────── stack ────────────────────────── -->
+  <section class="section stack" id="stack">
+    <div class="wrap">
+      <p class="eyebrow mono" data-reveal><span>02</span> — Tech stack</p>
+      <h2 class="h2 h2--center" data-split="lines">The tools I reach for</h2>
+
+      <div class="cards" id="stackCards">
+        <article class="card" data-card>
+          <div class="card__icon"><img src="https://skillicons.dev/icons?i=python" alt="" loading="lazy" width="48" height="48" /></div>
+          <h3>Python</h3>
+          <p>My daily driver — scripts, problem solving, and my first steps into ML.</p>
+          <span class="card__idx mono">01</span>
+        </article>
+
+        <article class="card" data-card>
+          <div class="card__icon"><img src="https://skillicons.dev/icons?i=git" alt="" loading="lazy" width="48" height="48" /></div>
+          <h3>Git</h3>
+          <p>Branch, commit, review. Version control as a habit, not an afterthought.</p>
+          <span class="card__idx mono">02</span>
+        </article>
+
+        <article class="card" data-card>
+          <div class="card__icon"><img src="https://skillicons.dev/icons?i=github" alt="" loading="lazy" width="48" height="48" /></div>
+          <h3>GitHub</h3>
+          <p>Where the learning lives in public — and where open source starts.</p>
+          <span class="card__idx mono">03</span>
+        </article>
+
+        <article class="card" data-card>
+          <div class="card__icon"><img src="https://skillicons.dev/icons?i=vscode" alt="" loading="lazy" width="48" height="48" /></div>
+          <h3>VS Code</h3>
+          <p>Editor of choice. Dark theme, split panes, far too many extensions.</p>
+          <span class="card__idx mono">04</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────────────────────── learning (horizontal) ────────────────────────── -->
+  <section class="section learning" id="learning">
+    <div class="wrap learning__head">
+      <p class="eyebrow mono" data-reveal><span>03</span> — Currently learning</p>
+      <h2 class="h2" data-split="lines">Five things I'm getting better at</h2>
+    </div>
+
+    <div class="hscroll" id="hscroll">
+      <div class="hscroll__track" id="hscrollTrack">
+        <article class="panel">
+          <span class="panel__num mono">01</span>
+          <h3>Data Structures &amp; Algorithms</h3>
+          <p>Arrays, trees, graphs, complexity. The grammar of good code — one problem a day.</p>
+          <div class="panel__tags"><span>Problem solving</span><span>Big-O</span></div>
+        </article>
+
+        <article class="panel">
+          <span class="panel__num mono">02</span>
+          <h3>Object-Oriented Programming</h3>
+          <p>Classes, inheritance, abstraction — learning to design software that survives change.</p>
+          <div class="panel__tags"><span>Design</span><span>Python</span></div>
+        </article>
+
+        <article class="panel">
+          <span class="panel__num mono">03</span>
+          <h3>Artificial Intelligence</h3>
+          <p>From search and logic to how machines represent the world. The reason I'm here.</p>
+          <div class="panel__tags"><span>Curiosity</span><span>Theory</span></div>
+        </article>
+
+        <article class="panel">
+          <span class="panel__num mono">04</span>
+          <h3>Machine Learning</h3>
+          <p>Data in, patterns out. Working through the maths and the models, slowly and properly.</p>
+          <div class="panel__tags"><span>Models</span><span>Maths</span></div>
+        </article>
+
+        <article class="panel">
+          <span class="panel__num mono">05</span>
+          <h3>Software Development</h3>
+          <p>Turning ideas into things people can actually run. Shipping beats theorising.</p>
+          <div class="panel__tags"><span>Building</span><span>Git</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ────────────────────────── quote ────────────────────────── -->
+  <section class="quote">
+    <div class="wrap">
+      <blockquote class="quote__text" data-split="words">
+        “Every expert was once a beginner. Every commit is one step closer to mastery.”
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ────────────────────────── goals ────────────────────────── -->
+  <section class="section goals" id="goals">
+    <div class="wrap">
+      <p class="eyebrow mono" data-reveal><span>04</span> — 2026 Goals</p>
+      <h2 class="h2" data-split="lines">What this year is for</h2>
+
+      <ol class="timeline" id="timeline">
+        <div class="timeline__line" aria-hidden="true"><i></i></div>
+
+        <li class="tl" data-tl>
+          <span class="tl__dot" aria-hidden="true"></span>
+          <span class="tl__num mono">G1</span>
+          <h3>Build real-world projects</h3>
+          <p>Ideas that leave the notebook and end up in a repo someone can clone.</p>
+        </li>
+        <li class="tl" data-tl>
+          <span class="tl__dot" aria-hidden="true"></span>
+          <span class="tl__num mono">G2</span>
+          <h3>Master Data Structures &amp; Algorithms</h3>
+          <p>Consistent practice until the patterns feel obvious instead of clever.</p>
+        </li>
+        <li class="tl" data-tl>
+          <span class="tl__dot" aria-hidden="true"></span>
+          <span class="tl__num mono">G3</span>
+          <h3>Learn AI &amp; Machine Learning</h3>
+          <p>From intuition to implementation — understand it well enough to build it.</p>
+        </li>
+        <li class="tl" data-tl>
+          <span class="tl__dot" aria-hidden="true"></span>
+          <span class="tl__num mono">G4</span>
+          <h3>Contribute to Open Source</h3>
+          <p>First issue, first PR, first review. Learn by working alongside better engineers.</p>
+        </li>
+        <li class="tl" data-tl>
+          <span class="tl__dot" aria-hidden="true"></span>
+          <span class="tl__num mono">G5</span>
+          <h3>Land a Software Engineering Internship</h3>
+          <p>Put all of the above to work on a real team, on real problems.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ────────────────────────── stats ────────────────────────── -->
+  <section class="section stats" id="stats">
+    <div class="wrap">
+      <p class="eyebrow mono" data-reveal><span>05</span> — The receipts</p>
+      <h2 class="h2 h2--center" data-split="lines">Learning in public</h2>
+
+      <div class="stats__grid">
+        <div class="stats__card" data-reveal>
+          <img data-stat="overview" alt="GitHub stats overview" loading="lazy" />
+        </div>
+        <div class="stats__card" data-reveal>
+          <img data-stat="langs" alt="Most used languages" loading="lazy" />
+        </div>
+        <div class="stats__card stats__card--wide" data-reveal>
+          <img data-stat="streak" alt="GitHub contribution streak" loading="lazy" />
+        </div>
+        <div class="stats__card stats__card--wide" data-reveal>
+          <img data-stat="graph" alt="Contribution activity graph" loading="lazy" />
+        </div>
+      </div>
+
+      <div class="snake" data-reveal>
+        <img src="https://raw.githubusercontent.com/Platane/snk/output/github-contribution-grid-snake-dark.svg" alt="Contribution grid snake animation" loading="lazy" />
+      </div>
+
+      <p class="stats__hint">
+        Add your GitHub username to <code>js/config.js</code> to switch the live stat cards on.
+      </p>
+    </div>
+  </section>
+
+  <!-- ────────────────────────── contact ────────────────────────── -->
+  <section class="section contact" id="contact">
+    <div class="wrap contact__inner">
+      <p class="eyebrow mono" data-reveal><span>06</span> — Contact</p>
+
+      <h2 class="contact__title" data-split="chars">Let's build<br />something</h2>
+
+      <p class="contact__blurb" data-reveal>
+        Open to internships, collaborations, study partners and good conversations
+        about AI. My inbox is genuinely open.
+      </p>
+
+      <div class="contact__links" data-reveal>
+        <a class="link-big magnetic" data-link="email" href="#">
+          <span>Email</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
+        </a>
+        <a class="link-big magnetic" data-link="linkedin" href="#" target="_blank" rel="noopener noreferrer">
+          <span>LinkedIn</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
+        </a>
+        <a class="link-big magnetic" data-link="github" href="#" target="_blank" rel="noopener noreferrer">
+          <span>GitHub</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <p class="mono">© <span id="year">2026</span> Sreehari — built with GSAP + Lenis</p>
+    <a href="#home" data-scroll-to="#home" class="mono footer__top">Back to top ↑</a>
+  </div>
+</footer>
+
+<!-- ────────────────────────── scripts ────────────────────────── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
+<script src="js/config.js" defer></script>
+<script src="js/main.js" defer></script>
+</body>
+</html>
