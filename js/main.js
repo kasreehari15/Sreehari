@@ -267,42 +267,56 @@
   /* ══════════════════════════════════════════════════════════
      6. Preloader
      ══════════════════════════════════════════════════════════ */
+  const BOOT_LINES = [
+    '<span class="p">&gt;&gt;&gt;</span> <span class="key">import</span> sreehari',
+    '<span class="p">&gt;&gt;&gt;</span> sreehari.<span class="fn">boot</span>()',
+    '    fundamentals <span class="p">.........</span> <span class="ok">ok</span>',
+    '    python <span class="p">...............</span> <span class="ok">ok</span>',
+    '    curiosity <span class="p">............</span> <span class="ok">inf</span>',
+    '<span class="p">&gt;&gt;&gt;</span> <span class="fn">render</span>(portfolio)'
+  ];
+
   function runPreloader() {
     return new Promise((resolve) => {
       const pre = $("#preloader");
-      if (!pre || REDUCED) {
-        if (pre) pre.remove();
+      const log = $("#bootLog");
+
+      const done = () => {
         document.body.classList.remove("is-loading");
+        if (pre) pre.remove();
+        try {
+          sessionStorage.setItem("sreehari:booted", "1");
+        } catch (e) {
+          /* private mode — just boot every time */
+        }
         resolve();
+      };
+
+      /* already booted this session, or motion is unwelcome: skip straight in */
+      let seen = false;
+      try {
+        seen = sessionStorage.getItem("sreehari:booted") === "1";
+      } catch (e) {
+        seen = false;
+      }
+      if (!pre || !log || REDUCED || seen) {
+        done();
         return;
       }
 
-      const counter = { v: 0 };
-      const out = $("#preloaderCount");
+      log.innerHTML =
+        BOOT_LINES.map((html) => `<span class="boot__line">${html}</span>`).join("") +
+        '<span class="boot__line"><span class="p">&gt;&gt;&gt;</span> ' +
+        '<span class="boot__caret" id="bootCaret"></span></span>';
+      const lines = $$(".boot__line", log);
 
       gsap
-        .timeline({
-          onComplete: () => {
-            document.body.classList.remove("is-loading");
-            pre.remove();
-            resolve();
-          }
-        })
-        .to(".preloader__bar i", { scaleX: 1, duration: 1.35, ease: "power2.inOut" }, 0)
-        .to(
-          counter,
-          {
-            v: 100,
-            duration: 1.35,
-            ease: "power2.inOut",
-            onUpdate: () => {
-              if (out) out.textContent = Math.round(counter.v);
-            }
-          },
-          0
-        )
-        .to(".preloader__inner", { y: -30, opacity: 0, duration: 0.5, ease: "power2.in" }, "+=0.15")
-        .to(pre, { yPercent: -100, duration: 0.9, ease: "power4.inOut" }, "-=0.25");
+        .timeline({ onComplete: done })
+        .from("#boot", { y: 18, scale: 0.96, opacity: 0, duration: 0.45, ease: "power3.out" })
+        .to(lines, { opacity: 1, duration: 0.01, stagger: 0.135 }, 0.3)
+        .to("#bootCaret", { opacity: 0, duration: 0.4, repeat: 3, yoyo: true, ease: "steps(1)" }, 0.3)
+        .to("#boot", { scale: 0.97, opacity: 0, duration: 0.4, ease: "power2.in" }, "+=0.3")
+        .to(pre, { clipPath: "inset(0 0 100% 0)", duration: 0.7, ease: "power4.inOut" }, "-=0.2");
     });
   }
 

@@ -46,6 +46,56 @@ The site is live at `https://<username>.github.io/<repo>/` a minute later.
 
 ---
 
+## Brand
+
+The site is a small identity system rather than a themed page. Everything below
+repeats deliberately.
+
+### The mark
+
+A terminal prompt — a chevron and a cursor rule — in a rounded tile.
+
+It was chosen because it was already there: the hero types its roles after a
+`>`, the About card is a Python REPL, and the loading screen is a shell. Rather
+than invent a logo, the mark makes the motif that already runs through the site
+official. It beats a generic `</>`, which every developer portfolio uses.
+
+Used at: the favicon, the nav, and the social preview card.
+
+### The wordmark
+
+`sreehari`, lowercase, in JetBrains Mono. Lowercase because the voice is
+lowercase — a student learning in public, not a consultancy.
+
+### The core component
+
+**The terminal window** — window bar, three dots, mono body. It appears as the
+loading screen and again as the About card, so the first thing a visitor sees
+is the same object they meet again halfway down. One component, two jobs.
+
+### Recurring motifs
+
+| Motif | Where |
+| --- | --- |
+| The `>` prompt | Mark, hero role line, boot screen, About card |
+| Numbered sections | `01 — About`, `02 — Stack`, … in the nav, eyebrows, and menu |
+| Mono for metadata | Numbers, tags, labels, the cursor's word — never for prose |
+| One accent | A single cyan doing all the pointing |
+
+### Voice
+
+Plain, first person, present tense, and honest about being early. "I'm early in
+the story." "One problem a day." No superlatives, no invented seniority — the
+copy claims exactly what is true, which is what makes it credible.
+
+### Assets
+
+`assets/og.png` — a 1200×630 social preview built from the same tokens, so a
+shared link looks like the site. Regenerate it by editing the template and
+re-running the screenshot script if the palette ever changes.
+
+---
+
 ## Color palette
 
 Built on the **60-30-10 rule** with a single vibrant accent, so the content
@@ -121,7 +171,7 @@ js/main.js        Lenis setup, custom cursor, and every GSAP animation
 
 | Section | What happens |
 | --- | --- |
-| Preloader | Counter to 100 %, then the panel slides away |
+| Loading | A Python REPL boots the site — `import sreehari`, `sreehari.boot()`, three checks, then `render(portfolio)`. Skipped on repeat visits in the same session |
 | Hero | Name reveals character by character, roles type themselves out, an interactive neural-network canvas drifts behind |
 | Marquee | Loops forever, speeds up and skews with your scroll velocity |
 | About | Sticky Python REPL card that tilts in 3D under the cursor, beside masked line-by-line text reveals |

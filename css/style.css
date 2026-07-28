@@ -118,29 +118,50 @@ html.lenis, html.lenis body { height: auto; }
 
 .section { padding-block: clamp(88px, 13vh, 180px); position: relative; scroll-margin-top: 90px; }
 
-/* ── preloader ──────────────────────────────────────────── */
+/* ── loading screen: a Python REPL boot ─────────────────── */
 .preloader {
   position: fixed; inset: 0; z-index: 9999;
   display: grid; place-items: center;
+  padding: var(--gutter);
   background: var(--bg);
 }
-.preloader__inner { width: min(520px, 82vw); text-align: center; }
-.preloader__label { color: var(--text-mute); font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; }
-.preloader__word {
-  font-family: var(--font-sans);
-  font-size: clamp(1.9rem, 8vw, 4.2rem);
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  color: var(--text);
-  margin: 0.6rem 0 1.4rem;
+/* same window chrome as the About terminal — it is the brand's core component */
+.boot {
+  width: min(520px, 100%);
+  background: #0c0f16;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 40px 90px -50px rgba(0, 194, 255, 0.5);
 }
-.preloader__bar { height: 2px; background: var(--line); overflow: hidden; }
-.preloader__bar i {
-  display: block; height: 100%; width: 100%;
-  background: linear-gradient(90deg, var(--accent), var(--accent-dim));
-  transform: scaleX(0); transform-origin: left;
+.boot__bar {
+  display: flex; align-items: center; gap: 0.45rem;
+  padding: 0.7rem 1rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
 }
-.preloader__count { margin-top: 0.9rem; color: var(--text-mute); font-size: 0.82rem; }
+.boot__bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+.boot__bar i:first-child { background: #3a4150; }
+.boot__bar i:nth-child(2) { background: #4a5262; }
+.boot__bar i:nth-child(3) { background: var(--accent); }
+.boot__bar span { margin-left: auto; font-size: 0.68rem; color: var(--text-mute); }
+
+.boot__body {
+  margin: 0; padding: 1.2rem 1.1rem 1.3rem;
+  font-size: clamp(0.72rem, 2.6vw, 0.82rem);
+  line-height: 1.9;
+  color: var(--text-body);
+  min-height: 12.6em;
+}
+.boot__line { display: block; opacity: 0; }
+.boot__line .p { color: #4b5261; }
+.boot__line .fn { color: var(--accent); }
+.boot__line .ok { color: var(--accent-dim); }
+.boot__line .key { color: var(--text); font-weight: 500; }
+.boot__caret {
+  display: inline-block; width: 8px; height: 1.05em;
+  background: var(--accent); vertical-align: -0.18em;
+}
 
 /* ── chrome ─────────────────────────────────────────────── */
 .scroll-progress {
@@ -208,7 +229,8 @@ body.has-cursor * { cursor: none; }
 .nav.is-hidden { transform: translateY(-105%); }
 
 .nav__brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 600; }
-.nav__mark { font-family: var(--font-mono); color: var(--accent); }
+.nav__mark { display: inline-flex; color: var(--accent); }
+.nav__mark .icon { width: 22px; height: 22px; stroke-width: 2.2; }
 .nav__name { font-family: var(--font-sans); color: var(--text); letter-spacing: 0.01em; }
 
 .nav__links { display: flex; align-items: center; gap: clamp(1rem, 2vw, 1.9rem); font-size: 0.88rem; }
