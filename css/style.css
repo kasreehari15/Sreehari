@@ -332,7 +332,6 @@ body.has-cursor * { cursor: none; }
    carries its own slice of the same gradient (offsets are set in main.js). */
 .hero__title .char {
   display: inline-block;
-  will-change: transform;
   background-image: var(--grad);
   background-repeat: no-repeat;
   background-size: var(--grad-w, 100%) 100%;
@@ -528,6 +527,81 @@ body.has-cursor * { cursor: none; }
   font-size: 0.68rem; color: var(--text-mute); opacity: 0.65;
   transform: translateZ(20px);
 }
+
+/* ── projects ───────────────────────────────────────────── */
+.projects__head {
+  display: flex; flex-wrap: wrap; gap: 1.5rem;
+  align-items: flex-end; justify-content: space-between;
+  margin-bottom: clamp(1.8rem, 4vw, 2.6rem);
+}
+.projects__head .h2 { margin-bottom: 0; }
+.projects__all {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-size: 0.78rem; color: var(--text-mute);
+  border-bottom: 1px solid var(--line); padding-bottom: 0.3rem;
+  transition: color 0.3s, border-color 0.3s;
+}
+.projects__all:hover { color: var(--accent); border-color: var(--accent); }
+.projects__all .icon { width: 13px; height: 13px; }
+
+.projects__grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.15rem;
+  perspective: var(--depth);
+}
+.projects__state {
+  grid-column: 1 / -1;
+  margin: 0; padding: 3rem 1.5rem; text-align: center;
+  border: 1px dashed var(--line); border-radius: var(--radius);
+  color: var(--text-mute); font-size: 0.82rem;
+}
+.projects__state a { color: var(--accent); border-bottom: 1px solid var(--accent-line); }
+
+.project {
+  position: relative; display: flex; flex-direction: column;
+  padding: 1.5rem 1.4rem 1.3rem;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: linear-gradient(160deg, rgba(29, 34, 46, 0.85), rgba(14, 17, 24, 0.85));
+  transform-style: preserve-3d; will-change: transform;
+  transition: border-color 0.4s var(--ease);
+  overflow: hidden;
+}
+.project::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 0%), rgba(0, 194, 255, 0.12), transparent 70%);
+  opacity: 0; transition: opacity 0.4s;
+}
+.project:hover { border-color: var(--accent-line); }
+.project:hover::after { opacity: 1; }
+.project__layer { position: relative; z-index: 1; display: flex; flex-direction: column; flex: 1; transform: translateZ(32px); }
+
+.project__head { display: flex; align-items: center; gap: 0.55rem; margin-bottom: 0.7rem; }
+.project__head .icon { width: 17px; height: 17px; color: var(--accent); }
+.project__head h3 {
+  font-size: 1.02rem; font-weight: 600; letter-spacing: -0.01em;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.project__out { margin-left: auto; width: 14px; height: 14px; color: var(--text-mute); transition: transform 0.35s var(--ease), color 0.35s; }
+.project:hover .project__out { transform: translate(3px, -3px); color: var(--accent); }
+
+.project__desc {
+  color: var(--text-mute); font-size: 0.86rem; line-height: 1.55;
+  margin: 0 0 1rem; flex: 1;
+}
+.project__topics { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.9rem; }
+.project__topics span {
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.04em;
+  padding: 0.22rem 0.5rem; border-radius: 100px;
+  border: 1px solid var(--line); color: var(--text-mute);
+}
+.project__meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.9rem;
+  font-size: 0.68rem; color: var(--text-mute);
+  padding-top: 0.85rem; border-top: 1px solid var(--line-soft);
+}
+.project__meta span { display: inline-flex; align-items: center; gap: 0.32rem; }
+.project__meta .icon { width: 12px; height: 12px; }
+.project__lang i { width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--text-mute)); }
 
 /* ── horizontal scroll ──────────────────────────────────── */
 .learning {

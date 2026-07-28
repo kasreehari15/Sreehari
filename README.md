@@ -171,7 +171,7 @@ js/main.js        Lenis setup, custom cursor, and every GSAP animation
 
 | Section | What happens |
 | --- | --- |
-| Loading | A Python REPL boots the site — `import sreehari`, `sreehari.boot()`, three checks, then `render(portfolio)`. Skipped on repeat visits in the same session |
+| Loading | A Python REPL performs the real GitHub request and reports the real result (see below). Skipped on repeat visits in the same session |
 | Hero | Name reveals character by character, roles type themselves out, an interactive neural-network canvas drifts behind |
 | Marquee | Loops forever, speeds up and skews with your scroll velocity |
 | About | Sticky Python REPL card that tilts in 3D under the cursor, beside masked line-by-line text reveals |
@@ -203,6 +203,60 @@ All drawn on a 24 px grid with a 1.7 stroke and round caps, so the set reads as
 one family. They inherit `currentColor`, so they recolour with their context
 and need no separate dark/light variants. The favicon is a drawn `</>` mark
 rather than an emoji glyph, so it renders identically on every platform.
+
+## The loading screen does real work
+
+Most loading screens are theatre — a fake bar animating to 100 % regardless of
+what is happening. This one is not. It runs the actual `GET` against the GitHub
+API that the projects section needs, and prints what came back:
+
+```
+>>> import sreehari
+>>> sreehari.connect("github")
+    GET /users/kasreehari15/repos → 200
+    repositories ......... 5
+    languages ............ Python, Jupyter Notebook, Java
+>>>
+```
+
+Those numbers are read off the response. Open devtools and the request is
+there. A cached response prints `200 (cache)`, a failure prints the real status
+or `offline`, and if the API is slow the screen prints `pending` and moves on
+rather than holding the visitor hostage — the wait is capped at 1.4 s.
+
+The side effect is the point: by the time the projects section is scrolled to,
+its data is already in hand, so it renders instantly instead of showing a
+second spinner.
+
+## Projects
+
+Cards are built from the GitHub API at runtime, so the section can never go
+stale — pushing a repo updates the portfolio.
+
+- Forks, archived repos, private repos and the profile-README repo are dropped.
+- Featured repos come first, then most-starred, then most recently pushed.
+- Each card shows the language (with its GitHub colour), stars, topics and the
+  last push date.
+- Responses are cached in `localStorage` for 30 minutes, so a visitor clicking
+  around never spends more than one request against the unauthenticated rate
+  limit.
+
+Every failure mode is handled with something honest rather than a broken grid:
+
+| Situation | What the visitor sees |
+| --- | --- |
+| Repos found | The cards |
+| No public repos yet | "They will appear here automatically as soon as the first one is pushed" |
+| Rate-limited or offline | A direct link to the repositories on GitHub |
+| `githubUsername` not set | A note pointing at `js/config.js` |
+
+Tune it in `js/config.js`:
+
+```js
+featuredRepos: ["digit-recogniser"],  // pin these first, in order
+hiddenRepos:   ["scratch-notes"],     // never show these
+maxProjects:   6                      // how many cards
+```
 
 ## The custom cursor
 

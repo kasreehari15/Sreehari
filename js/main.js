@@ -18,6 +18,9 @@
   );
 
   const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /* set by init3D / initPointer, reused by cards rendered later */
+  let bindTilt = null;
+  let bindCursorLabel = null;
   const hasGsap = typeof window.gsap !== "undefined";
   const $  = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
@@ -25,6 +28,9 @@
   /* ══════════════════════════════════════════════════════════
      1. Config → DOM
      ══════════════════════════════════════════════════════════ */
+  const isPlaceholder = (v) =>
+    !v || /^YOUR[_-]/.test(v) || String(v).includes("YOUR-LINKEDIN");
+
   function applyConfig() {
     const user = CFG.githubUsername;
     const theme = CFG.statsTheme;
@@ -37,7 +43,7 @@
       graph: `https://github-readme-activity-graph.vercel.app/graph?username=${user}&theme=tokyo-night&bg_color=00000000&hide_border=true`
     };
 
-    const placeholder = (v) => !v || /^YOUR[_-]/.test(v) || v.includes("YOUR-LINKEDIN");
+    const placeholder = isPlaceholder;
 
     if (placeholder(user)) {
       const stats = $("#stats");
@@ -66,6 +72,57 @@
 
     const year = $("#year");
     if (year) year.textContent = new Date().getFullYear();
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     1b. GitHub repositories — fetched once, shared by the
+         loading screen and the projects section.
+     ══════════════════════════════════════════════════════════ */
+  const REPO_CACHE = "sreehari:repos";
+  const REPO_TTL = 30 * 60 * 1000;
+  let reposPromise = null;
+
+  function fetchRepos() {
+    const user = CFG.githubUsername;
+    if (isPlaceholder(user)) {
+      return Promise.resolve({ ok: false, reason: "unconfigured", repos: [] });
+    }
+
+    try {
+      const raw = localStorage.getItem(REPO_CACHE);
+      if (raw) {
+        const c = JSON.parse(raw);
+        if (c.user === user && Date.now() - c.at < REPO_TTL) {
+          return Promise.resolve({ ok: true, status: 200, cached: true, repos: c.repos });
+        }
+      }
+    } catch (e) {
+      /* storage blocked — just fetch */
+    }
+
+    const url =
+      `https://api.github.com/users/${encodeURIComponent(user)}` +
+      "/repos?sort=updated&per_page=100";
+
+    return fetch(url, { headers: { Accept: "application/vnd.github+json" } })
+      .then((res) =>
+        res.ok
+          ? res.json().then((repos) => {
+              try {
+                localStorage.setItem(REPO_CACHE, JSON.stringify({ user, at: Date.now(), repos }));
+              } catch (e) {
+                /* over quota — fine, we just refetch next time */
+              }
+              return { ok: true, status: res.status, repos };
+            })
+          : { ok: false, status: res.status, reason: "http", repos: [] }
+      )
+      .catch(() => ({ ok: false, reason: "network", repos: [] }));
+  }
+
+  function startRepoFetch() {
+    if (!reposPromise) reposPromise = fetchRepos();
+    return reposPromise;
   }
 
   /* ══════════════════════════════════════════════════════════
@@ -267,14 +324,23 @@
   /* ══════════════════════════════════════════════════════════
      6. Preloader
      ══════════════════════════════════════════════════════════ */
-  const BOOT_LINES = [
-    '<span class="p">&gt;&gt;&gt;</span> <span class="key">import</span> sreehari',
-    '<span class="p">&gt;&gt;&gt;</span> sreehari.<span class="fn">boot</span>()',
-    '    fundamentals <span class="p">.........</span> <span class="ok">ok</span>',
-    '    python <span class="p">...............</span> <span class="ok">ok</span>',
-    '    curiosity <span class="p">............</span> <span class="ok">inf</span>',
-    '<span class="p">&gt;&gt;&gt;</span> <span class="fn">render</span>(portfolio)'
-  ];
+  /* ══════════════════════════════════════════════════════════
+     6. Loading screen — it performs the real GitHub request the
+        projects section needs and reports the actual result, so
+        the numbers on screen are never theatre.
+     ══════════════════════════════════════════════════════════ */
+  const line = (html) => `<span class="boot__line">${html}</span>`;
+  const P = '<span class="p">&gt;&gt;&gt;</span>';
+
+  function topLanguages(repos) {
+    const tally = {};
+    repos.forEach((r) => {
+      if (r.language) tally[r.language] = (tally[r.language] || 0) + 1;
+    });
+    return Object.keys(tally)
+      .sort((a, b) => tally[b] - tally[a])
+      .slice(0, 3);
+  }
 
   function runPreloader() {
     return new Promise((resolve) => {
@@ -287,12 +353,11 @@
         try {
           sessionStorage.setItem("sreehari:booted", "1");
         } catch (e) {
-          /* private mode — just boot every time */
+          /* private mode — boot every time, no harm */
         }
         resolve();
       };
 
-      /* already booted this session, or motion is unwelcome: skip straight in */
       let seen = false;
       try {
         seen = sessionStorage.getItem("sreehari:booted") === "1";
@@ -304,19 +369,59 @@
         return;
       }
 
+      const user = CFG.githubUsername;
       log.innerHTML =
-        BOOT_LINES.map((html) => `<span class="boot__line">${html}</span>`).join("") +
-        '<span class="boot__line"><span class="p">&gt;&gt;&gt;</span> ' +
-        '<span class="boot__caret" id="bootCaret"></span></span>';
-      const lines = $$(".boot__line", log);
+        line(`${P} <span class="key">import</span> sreehari`) +
+        line(`${P} sreehari.<span class="fn">connect</span>(<span class="ok">"github"</span>)`) +
+        '<span class="boot__slot" id="bootSlot"></span>' +
+        line(`${P} <span class="boot__caret" id="bootCaret"></span>`);
 
-      gsap
-        .timeline({ onComplete: done })
-        .from("#boot", { y: 18, scale: 0.96, opacity: 0, duration: 0.45, ease: "power3.out" })
-        .to(lines, { opacity: 1, duration: 0.01, stagger: 0.135 }, 0.3)
-        .to("#bootCaret", { opacity: 0, duration: 0.4, repeat: 3, yoyo: true, ease: "steps(1)" }, 0.3)
-        .to("#boot", { scale: 0.97, opacity: 0, duration: 0.4, ease: "power2.in" }, "+=0.3")
-        .to(pre, { clipPath: "inset(0 0 100% 0)", duration: 0.7, ease: "power4.inOut" }, "-=0.2");
+      const lines = $$(".boot__line", log);
+      const slot = $("#bootSlot");
+
+      const tl = gsap.timeline();
+      tl.from("#boot", { y: 18, scale: 0.96, opacity: 0, duration: 0.45, ease: "power3.out" })
+        .to(lines.slice(0, 2), { opacity: 1, duration: 0.01, stagger: 0.16 }, 0.28)
+        .to("#bootCaret", { opacity: 0, duration: 0.4, repeat: -1, yoyo: true, ease: "steps(1)" }, 0.3);
+
+      /* the request is real; cap how long we are willing to wait on it */
+      const capped = Promise.race([
+        startRepoFetch(),
+        new Promise((r) => setTimeout(() => r({ slow: true }), 1400))
+      ]);
+
+      /* hold the first two lines on screen for a beat even if the API is instant */
+      const minBeat = new Promise((r) => setTimeout(r, 750));
+
+      Promise.all([capped, minBeat]).then(([result]) => {
+        let rows;
+        if (result.slow) {
+          rows = [`    <span class="p">GET</span> /users/${user}/repos <span class="p">…</span> <span class="ok">pending</span>`];
+        } else if (result.ok) {
+          const repos = result.repos.filter((r) => !r.fork);
+          const langs = topLanguages(repos);
+          rows = [
+            `    <span class="p">GET</span> /users/${user}/repos <span class="p">→</span> <span class="ok">${result.cached ? "200 (cache)" : result.status}</span>`,
+            `    repositories <span class="p">.........</span> <span class="ok">${repos.length}</span>`,
+            `    languages <span class="p">............</span> <span class="ok">${langs.length ? langs.join(", ") : "—"}</span>`
+          ];
+        } else {
+          rows = [
+            `    <span class="p">GET</span> /users/${user}/repos <span class="p">→</span> <span class="ok">${result.status || "offline"}</span>`,
+            `    falling back <span class="p">.........</span> <span class="ok">static</span>`
+          ];
+        }
+
+        slot.innerHTML = rows.map(line).join("");
+        const rowEls = $$(".boot__line", slot);
+
+        gsap
+          .timeline({ onComplete: done })
+          .to(rowEls, { opacity: 1, duration: 0.01, stagger: 0.13 })
+          .to(lines[lines.length - 1], { opacity: 1, duration: 0.01 }, "<")
+          .to("#boot", { scale: 0.97, opacity: 0, duration: 0.4, ease: "power2.in" }, "+=0.45")
+          .to(pre, { clipPath: "inset(0 0 100% 0)", duration: 0.7, ease: "power4.inOut" }, "-=0.2");
+      });
     });
   }
 
@@ -329,7 +434,7 @@
   /* Each character paints its own slice of the title gradient. */
   function alignTitleGradient() {
     const title = $(".hero__title");
-    if (!title || !heroChars.length) return;
+    if (!title || !heroChars.length) return; /* already unwrapped */
     const box = title.getBoundingClientRect();
     heroChars.forEach((char) => {
       const r = char.getBoundingClientRect();
@@ -353,9 +458,19 @@
 
   function heroIntro() {
     if (REDUCED) return;
+    const title = $(".hero__title");
     const tl = gsap.timeline({
       defaults: { ease: "power4.out" },
-      onComplete: () => gsap.set(heroChars, { willChange: "auto" })
+      onComplete: () => {
+        /* Restore the plain heading. Afterwards nothing inside it is
+           transformed or separately painted, which is what kept triggering
+           the background-clip artifact on Android GPUs. */
+        if (title && title._origHTML !== undefined) {
+          title.innerHTML = title._origHTML;
+          title.classList.remove("is-split");
+          heroChars = [];
+        }
+      }
     });
 
     tl.to(".nav", { y: 0, opacity: 1, duration: 0.9 }, 0)
@@ -474,7 +589,7 @@
 
     /* ── stack cards tilt toward the pointer, contents float above ── */
     if (window.matchMedia("(pointer: fine)").matches) {
-      $$(".card").forEach((card) => {
+      bindTilt = (card) => {
         const rx = gsap.quickTo(card, "rotationX", { duration: 0.6, ease: "power3" });
         const ry = gsap.quickTo(card, "rotationY", { duration: 0.6, ease: "power3" });
         const rz = gsap.quickTo(card, "z", { duration: 0.6, ease: "power3" });
@@ -494,7 +609,8 @@
           ry(0);
           rz(0);
         });
-      });
+      };
+      $$(".card").forEach(bindTilt);
 
       /* ── the terminal card gets the same treatment ── */
       $$(".tilt-3d").forEach((el) => {
@@ -856,20 +972,21 @@
       [".cube-stage", "spin"],
       [".panel", "read"]
     ];
-    LABELLED.forEach(([selector, text]) => {
-      $$(selector).forEach((el) => {
-        el.addEventListener("mouseenter", () => {
-          if (label) label.textContent = text;
-          ring.classList.add("is-label");
-          dot.classList.add("is-hidden");
-          setRing(1.9, false);
-        });
-        el.addEventListener("mouseleave", () => {
-          ring.classList.remove("is-label");
-          dot.classList.remove("is-hidden");
-          setRing(1, false);
-        });
+    bindCursorLabel = (el, text) => {
+      el.addEventListener("mouseenter", () => {
+        if (label) label.textContent = text;
+        ring.classList.add("is-label");
+        dot.classList.add("is-hidden");
+        setRing(1.9, false);
       });
+      el.addEventListener("mouseleave", () => {
+        ring.classList.remove("is-label");
+        dot.classList.remove("is-hidden");
+        setRing(1, false);
+      });
+    };
+    LABELLED.forEach(([selector, text]) => {
+      $$(selector).forEach((el) => bindCursorLabel(el, text));
     });
 
     /* magnetic pull */
@@ -995,10 +1112,127 @@
   }
 
   /* ══════════════════════════════════════════════════════════
+     14b. Projects — rendered from the repositories the loading
+          screen already fetched.
+     ══════════════════════════════════════════════════════════ */
+  const LANG_COLOR = {
+    Python: "#3572A5", JavaScript: "#f1e05a", TypeScript: "#3178c6",
+    HTML: "#e34c26", CSS: "#563d7c", Java: "#b07219", C: "#555555",
+    "C++": "#f34b7d", "C#": "#178600", "Jupyter Notebook": "#DA5B0B",
+    Shell: "#89e051", Go: "#00ADD8", Rust: "#dea584", Dart: "#00B4AB",
+    Kotlin: "#A97BFF", PHP: "#4F5D95", Ruby: "#701516", Swift: "#F05138", R: "#198CE7"
+  };
+
+  const esc = (s) =>
+    String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+
+  const monthYear = (iso) => {
+    const d = new Date(iso);
+    return isNaN(d) ? "" : d.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
+  };
+
+  function projectCard(repo) {
+    const lang = repo.language;
+    const topics = (repo.topics || []).slice(0, 3);
+    const stars = repo.stargazers_count || 0;
+
+    return `
+      <a class="project" href="${esc(repo.html_url)}" target="_blank" rel="noopener noreferrer">
+        <span class="project__layer">
+          <span class="project__head">
+            <svg class="icon" aria-hidden="true"><use href="#i-repo" /></svg>
+            <h3>${esc(repo.name)}</h3>
+            <svg class="icon project__out" aria-hidden="true"><use href="#i-arrow-out" /></svg>
+          </span>
+          <p class="project__desc">${esc(repo.description || "No description yet.")}</p>
+          ${topics.length ? `<span class="project__topics">${topics.map((t) => `<span>${esc(t)}</span>`).join("")}</span>` : ""}
+          <span class="project__meta mono">
+            ${lang ? `<span class="project__lang"><i style="--c:${esc(LANG_COLOR[lang] || "#929cb0")}"></i>${esc(lang)}</span>` : ""}
+            ${stars ? `<span><svg class="icon" aria-hidden="true"><use href="#i-star" /></svg>${stars}</span>` : ""}
+            <span>${esc(monthYear(repo.pushed_at || repo.updated_at))}</span>
+          </span>
+        </span>
+      </a>`;
+  }
+
+  function initProjects() {
+    const grid = $("#projectGrid");
+    if (!grid) return;
+
+    const user = CFG.githubUsername;
+    const all = $("#projectsAll");
+    if (all) {
+      if (isPlaceholder(user)) all.remove();
+      else all.href = `https://github.com/${user}?tab=repositories`;
+    }
+
+    const state = (html) => {
+      grid.innerHTML = `<p class="projects__state mono">${html}</p>`;
+      grid.setAttribute("aria-busy", "false");
+    };
+
+    startRepoFetch().then((result) => {
+      if (result.reason === "unconfigured") {
+        state("Add your GitHub username to <code>js/config.js</code> to list your repositories here.");
+        return;
+      }
+      if (!result.ok) {
+        state(
+          `Could not reach the GitHub API right now — ` +
+          `<a href="https://github.com/${esc(user)}?tab=repositories" target="_blank" rel="noopener noreferrer">browse the repositories directly</a>.`
+        );
+        return;
+      }
+
+      const featured = (CFG.featuredRepos || []).map((n) => String(n).toLowerCase());
+      const hidden = (CFG.hiddenRepos || []).map((n) => String(n).toLowerCase());
+
+      const repos = result.repos
+        .filter((r) => !r.fork && !r.archived && !r.private)
+        /* a profile README repo is not a project */
+        .filter((r) => r.name.toLowerCase() !== String(user).toLowerCase())
+        .filter((r) => !hidden.includes(r.name.toLowerCase()))
+        .sort((a, b) => {
+          const fa = featured.indexOf(a.name.toLowerCase());
+          const fb = featured.indexOf(b.name.toLowerCase());
+          if (fa !== fb) return (fa === -1 ? 99 : fa) - (fb === -1 ? 99 : fb);
+          if (b.stargazers_count !== a.stargazers_count) return b.stargazers_count - a.stargazers_count;
+          return new Date(b.pushed_at || b.updated_at) - new Date(a.pushed_at || a.updated_at);
+        })
+        .slice(0, CFG.maxProjects || 6);
+
+      if (!repos.length) {
+        state("No public repositories yet — they will appear here automatically as soon as the first one is pushed.");
+        return;
+      }
+
+      grid.innerHTML = repos.map(projectCard).join("");
+      grid.setAttribute("aria-busy", "false");
+
+      const cards = $$(".project", grid);
+      if (!REDUCED && hasGsap) {
+        gsap.from(cards, {
+          y: 50, opacity: 0, duration: 0.9, stagger: 0.08,
+          immediateRender: true,
+          scrollTrigger: { trigger: grid, start: "top 88%", once: true }
+        });
+        cards.forEach((card) => {
+          if (bindTilt) bindTilt(card);
+          if (bindCursorLabel) bindCursorLabel(card, "open");
+        });
+        ScrollTrigger.refresh();
+      }
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════
      15. Boot
      ══════════════════════════════════════════════════════════ */
   function boot() {
     applyConfig();
+    startRepoFetch();
     initLenis();
     if (lenis) lenis.stop();
 
@@ -1013,6 +1247,7 @@
     initPointer();
     initCanvas();
     init3D();
+    initProjects();
 
     runPreloader().then(() => {
       if (lenis) {

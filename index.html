@@ -81,6 +81,17 @@
   <symbol id="i-spark" viewBox="0 0 24 24">
     <path d="M12 3c.6 4.4 4.6 8.4 9 9-4.4.6-8.4 4.6-9 9-.6-4.4-4.6-8.4-9-9 4.4-.6 8.4-4.6 9-9Z" />
   </symbol>
+  <symbol id="i-repo" viewBox="0 0 24 24">
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
+  </symbol>
+  <symbol id="i-star" viewBox="0 0 24 24">
+    <path d="m12 3.2 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.8l6.2-.9L12 3.2Z" />
+  </symbol>
+  <symbol id="i-arrow-out" viewBox="0 0 24 24">
+    <path d="M7 17 17 7" />
+    <path d="M9 7h8v8" />
+  </symbol>
   <symbol id="i-arrow-up" viewBox="0 0 24 24">
     <path d="M12 19V5" />
     <path d="m5 12 7-7 7 7" />
@@ -112,9 +123,9 @@
 
   <nav class="nav__links" aria-label="Primary">
     <a href="#about"    data-scroll-to="#about"><span class="mono">01</span> About</a>
-    <a href="#stack"    data-scroll-to="#stack"><span class="mono">02</span> Stack</a>
-    <a href="#learning" data-scroll-to="#learning"><span class="mono">03</span> Learning</a>
-    <a href="#goals"    data-scroll-to="#goals"><span class="mono">04</span> Goals</a>
+    <a href="#projects" data-scroll-to="#projects"><span class="mono">02</span> Work</a>
+    <a href="#stack"    data-scroll-to="#stack"><span class="mono">03</span> Stack</a>
+    <a href="#learning" data-scroll-to="#learning"><span class="mono">04</span> Learning</a>
     <a href="#contact"  data-scroll-to="#contact" class="nav__cta">Contact</a>
   </nav>
 
@@ -127,11 +138,12 @@
   <div class="menu__inner">
     <a href="#home"     data-scroll-to="#home"><span class="mono">00</span> Home</a>
     <a href="#about"    data-scroll-to="#about"><span class="mono">01</span> About</a>
-    <a href="#stack"    data-scroll-to="#stack"><span class="mono">02</span> Stack</a>
-    <a href="#learning" data-scroll-to="#learning"><span class="mono">03</span> Learning</a>
-    <a href="#goals"    data-scroll-to="#goals"><span class="mono">04</span> Goals</a>
-    <a href="#stats"    data-scroll-to="#stats"><span class="mono">05</span> Stats</a>
-    <a href="#contact"  data-scroll-to="#contact"><span class="mono">06</span> Contact</a>
+    <a href="#projects" data-scroll-to="#projects"><span class="mono">02</span> Work</a>
+    <a href="#stack"    data-scroll-to="#stack"><span class="mono">03</span> Stack</a>
+    <a href="#learning" data-scroll-to="#learning"><span class="mono">04</span> Learning</a>
+    <a href="#goals"    data-scroll-to="#goals"><span class="mono">05</span> Goals</a>
+    <a href="#stats"    data-scroll-to="#stats"><span class="mono">06</span> Stats</a>
+    <a href="#contact"  data-scroll-to="#contact"><span class="mono">07</span> Contact</a>
   </div>
 </div>
 
@@ -249,12 +261,32 @@
     </div>
   </section>
 
+  <!-- ────────────────────────── projects ────────────────────────── -->
+  <section class="section projects" id="projects">
+    <div class="wrap">
+      <div class="projects__head">
+        <div>
+          <p class="eyebrow mono" data-reveal><span>02</span> — Selected work</p>
+          <h2 class="h2" data-split="lines">Things I've built</h2>
+        </div>
+        <a class="projects__all mono" id="projectsAll" href="#" target="_blank" rel="noopener noreferrer">
+          <span>All repositories</span>
+          <svg class="icon" aria-hidden="true"><use href="#i-arrow-out" /></svg>
+        </a>
+      </div>
+
+      <div class="projects__grid" id="projectGrid" aria-live="polite" aria-busy="true">
+        <p class="projects__state mono">loading repositories&hellip;</p>
+      </div>
+    </div>
+  </section>
+
   <!-- ────────────────────────── stack ────────────────────────── -->
   <section class="section stack" id="stack">
     <div class="wrap">
       <div class="stack__head">
         <div>
-          <p class="eyebrow mono" data-reveal><span>02</span> — Tech stack</p>
+          <p class="eyebrow mono" data-reveal><span>03</span> — Tech stack</p>
           <h2 class="h2" data-split="lines">The tools I reach for</h2>
           <p class="stack__lede" data-reveal>
             A small toolkit, used properly. Everything here is something I actually
@@ -319,7 +351,7 @@
   <!-- ────────────────────────── learning (horizontal) ────────────────────────── -->
   <section class="section learning" id="learning">
     <div class="wrap learning__head">
-      <p class="eyebrow mono" data-reveal><span>03</span> — Currently learning</p>
+      <p class="eyebrow mono" data-reveal><span>04</span> — Currently learning</p>
       <h2 class="h2" data-split="lines">Five things I'm getting better at</h2>
     </div>
 
@@ -375,7 +407,7 @@
   <!-- ────────────────────────── goals ────────────────────────── -->
   <section class="section goals" id="goals">
     <div class="wrap">
-      <p class="eyebrow mono" data-reveal><span>04</span> — 2026 Goals</p>
+      <p class="eyebrow mono" data-reveal><span>05</span> — 2026 Goals</p>
       <h2 class="h2" data-split="lines">What this year is for</h2>
 
       <ol class="timeline" id="timeline">
@@ -418,7 +450,7 @@
   <!-- ────────────────────────── stats ────────────────────────── -->
   <section class="section stats" id="stats">
     <div class="wrap">
-      <p class="eyebrow mono" data-reveal><span>05</span> — The receipts</p>
+      <p class="eyebrow mono" data-reveal><span>06</span> — The receipts</p>
       <h2 class="h2 h2--center" data-split="lines">Learning in public</h2>
 
       <div class="stats__grid">
@@ -449,7 +481,7 @@
   <!-- ────────────────────────── contact ────────────────────────── -->
   <section class="section contact" id="contact">
     <div class="wrap contact__inner">
-      <p class="eyebrow mono" data-reveal><span>06</span> — Contact</p>
+      <p class="eyebrow mono" data-reveal><span>07</span> — Contact</p>
 
       <h2 class="contact__title" data-split="chars">Let's build<br />something</h2>
 

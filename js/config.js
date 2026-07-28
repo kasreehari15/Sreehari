@@ -23,5 +23,18 @@ window.PORTFOLIO_CONFIG = {
   ],
 
   /* Theme used by the GitHub README stat cards */
-  statsTheme: "tokyonight"
+  statsTheme: "tokyonight",
+
+  /* ── Projects section ──────────────────────────────────────
+     Cards are pulled live from the GitHub API. Forks, archived
+     repos and your profile-README repo are skipped automatically. */
+
+  /* Pin your best repos to the front, in order, by repo name */
+  featuredRepos: [],
+
+  /* Repo names to leave out entirely */
+  hiddenRepos: [],
+
+  /* How many cards to show */
+  maxProjects: 6
 };
