@@ -1,1 +1,303 @@
-# Sreehari
+# Sreehari — Portfolio
+
+A responsive single-page portfolio built with **GSAP** (+ ScrollTrigger) for motion
+and **Lenis** for smooth scrolling, with real CSS 3D and a custom cursor. Dark,
+terminal-flavoured, and tuned to the vibe of a CSE student who's into Python, AI
+and machine learning.
+
+No build step, no dependencies to install. It's plain HTML, CSS and JavaScript.
+
+---
+
+## Setup
+
+Everything personal lives in one file: **`js/config.js`**.
+
+```js
+window.PORTFOLIO_CONFIG = {
+  githubUsername: "YOUR_USERNAME",                          // ← your GitHub handle
+  linkedinUrl:    "https://www.linkedin.com/in/YOUR-LINKEDIN/",
+  email:          "YOUR_EMAIL",
+  roles: [ "B.Tech CSE Student", "..." ],                   // typed under your name
+  statsTheme: "tokyonight"
+};
+```
+
+Fill those in and the nav links, contact buttons, GitHub stat cards, streak,
+and activity graph all wire themselves up. Until `githubUsername` is set, the
+stats section shows a short reminder instead of broken images.
+
+## Running it locally
+
+Open `index.html` in a browser, or serve the folder:
+
+```bash
+python3 -m http.server 8000
+# then visit http://localhost:8000
+```
+
+## Deploying to GitHub Pages
+
+1. Push this repository to GitHub.
+2. **Settings → Pages → Build and deployment → Deploy from a branch.**
+3. Pick the branch and the `/ (root)` folder, then save.
+
+The site is live at `https://<username>.github.io/<repo>/` a minute later.
+
+---
+
+## Brand
+
+The site is a small identity system rather than a themed page. Everything below
+repeats deliberately.
+
+### The mark
+
+A terminal prompt — a chevron and a cursor rule — in a rounded tile.
+
+It was chosen because it was already there: the hero types its roles after a
+`>`, the About card is a Python REPL, and the loading screen is a shell. Rather
+than invent a logo, the mark makes the motif that already runs through the site
+official. It beats a generic `</>`, which every developer portfolio uses.
+
+Used at: the favicon, the nav, and the social preview card.
+
+### The wordmark
+
+`sreehari`, lowercase, in JetBrains Mono. Lowercase because the voice is
+lowercase — a student learning in public, not a consultancy.
+
+### The core component
+
+**The terminal window** — window bar, three dots, mono body. It appears as the
+loading screen and again as the About card, so the first thing a visitor sees
+is the same object they meet again halfway down. One component, two jobs.
+
+### Recurring motifs
+
+| Motif | Where |
+| --- | --- |
+| The `>` prompt | Mark, hero role line, boot screen, About card |
+| Numbered sections | `01 — About`, `02 — Stack`, … in the nav, eyebrows, and menu |
+| Mono for metadata | Numbers, tags, labels, the cursor's word — never for prose |
+| One accent | A single cyan doing all the pointing |
+
+### Voice
+
+Plain, first person, present tense, and honest about being early. "I'm early in
+the story." "One problem a day." No superlatives, no invented seniority — the
+copy claims exactly what is true, which is what makes it credible.
+
+### Assets
+
+`assets/og.png` — a 1200×630 social preview built from the same tokens, so a
+shared link looks like the site. Regenerate it by editing the template and
+re-running the screenshot script if the palette ever changes.
+
+---
+
+## Color palette
+
+Built on the **60-30-10 rule** with a single vibrant accent, so the content
+carries the page rather than the decoration. Every value is a CSS custom
+property at the top of `css/style.css` — change them there and the whole site
+follows.
+
+### 60 % — dominant surface
+
+| Token | Hex | Used for |
+| --- | --- | --- |
+| `--bg` | `#0a0c11` | Page background |
+| `--bg-alt` | `#0e1118` | Alternating bands — marquee, mobile menu |
+
+### 30 % — structure and text
+
+| Token | Hex | Used for | Contrast on `--bg` |
+| --- | --- | --- | --- |
+| `--surface` | `#151922` | Cards, terminal chrome, stat panels | — |
+| `--surface-2` | `#1d222e` | Raised surfaces, card gradient top | — |
+| `--line` | `#272d3a` | Borders, dividers, timeline rail | — |
+| `--text` | `#e6eaf2` | Headings and emphasis | **16.2 : 1** |
+| `--text-body` | `#c3cad9` | Body copy | **11.9 : 1** |
+| `--text-mute` | `#929cb0` | Captions, eyebrows, meta | **7.1 : 1** |
+
+### 10 % — the accent
+
+| Token | Hex | Used for | Contrast on `--bg` |
+| --- | --- | --- | --- |
+| `--accent` | `#00c2ff` | Links, focus rings, active nav, buttons, cube, cursor | **9.5 : 1** |
+| `--accent-dim` | `#7fb3c9` | Same hue desaturated — code strings, gradient tail | **8.6 : 1** |
+
+Three colours in total: one dark neutral, one light neutral, one accent. Code
+syntax highlighting stays inside the accent's hue family rather than
+introducing new ones, and the terminal's window dots are neutral greys with a
+single accent highlight.
+
+Every text pairing clears WCAG AA (4.5 : 1) with room to spare — the weakest is
+muted text on a raised surface at 6.4 : 1. Button labels sit at 9.3 : 1 against
+the accent fill.
+
+## Typography
+
+**Two families.** Inter does the headings and the body, separated by weight
+rather than by typeface; JetBrains Mono handles anything that is code or reads
+like code.
+
+| Role | Family | Weights | Used for |
+| --- | --- | --- | --- |
+| Headings | **Inter** | 700–800 | `h1`–`h3`, nav brand, marquee, quote, menu |
+| Body | **Inter** | 400–600 | Paragraphs, lists, buttons, labels |
+| Code | **JetBrains Mono** | 400–700 | Terminal, eyebrow numbers, tags, cube faces, cursor label |
+
+Set as `--font-sans` and `--font-mono`.
+
+- Body text is **16 px minimum**, scaling to 18 px on wide screens.
+- Body line height is **1.62**.
+- Headings start at **2 rem (32 px)** — at least 2× the body size — and scale
+  with `clamp()` so they resize fluidly instead of jumping at breakpoints.
+
+---
+
+## What's in here
+
+```
+index.html        markup for every section
+css/style.css     tokens, layout, 3D, responsive rules, reduced-motion fallbacks
+js/config.js      ← the only file you need to edit
+js/main.js        Lenis setup, custom cursor, and every GSAP animation
+```
+
+## The animations
+
+| Section | What happens |
+| --- | --- |
+| Loading | A Python REPL performs the real GitHub request and reports the real result (see below). Skipped on repeat visits in the same session |
+| Hero | Name reveals character by character, roles type themselves out, an interactive neural-network canvas drifts behind |
+| Marquee | Loops forever, speeds up and skews with your scroll velocity |
+| About | Sticky Python REPL card that tilts in 3D under the cursor, beside masked line-by-line text reveals |
+| Stack | A 3D cube of six tech faces spins continuously and accelerates with scroll; cards tilt toward the pointer with their contents lifted on the Z axis |
+| Currently learning | Section pins and the cards travel sideways, rotating in 3D as they cross the centre (swipeable carousel on mobile) |
+| Quote | Words brighten one by one, tied to scroll position |
+| 2026 Goals | A gradient line draws down the timeline, each goal swinging in on a hinge as you reach it |
+| Contact | Headline characters flip up out of 3D space |
+| Everywhere | Custom cursor, magnetic buttons, scroll progress bar, auto-hiding nav |
+
+## Icons
+
+There are no emoji anywhere in the UI. Every icon is a line icon in a single
+inline `<svg class="sprite">` at the top of `index.html`, referenced with
+`<use href="#i-name">` — one definition, reused wherever it appears.
+
+| Symbol | Replaces | Used for |
+| --- | --- | --- |
+| `#i-wave` | 👋 | Hero greeting |
+| `#i-cap` | 🎓 | B.Tech Computer Science & Engineering |
+| `#i-code` | 💻 | Aspiring Software Engineer |
+| `#i-chip` | 🤖 | Passionate about Artificial Intelligence |
+| `#i-terminal` | 🐍 | Learning Python & CS fundamentals |
+| `#i-sprout` | 🌱 | Always curious, always building |
+| `#i-spark` | ✳ | Marquee separators |
+| `#i-arrow-up` | ↑ | Back to top |
+
+All drawn on a 24 px grid with a 1.7 stroke and round caps, so the set reads as
+one family. They inherit `currentColor`, so they recolour with their context
+and need no separate dark/light variants. The favicon is a drawn `</>` mark
+rather than an emoji glyph, so it renders identically on every platform.
+
+## The loading screen does real work
+
+Most loading screens are theatre — a fake bar animating to 100 % regardless of
+what is happening. This one is not. It runs the actual `GET` against the GitHub
+API that the projects section needs, and prints what came back:
+
+```
+>>> import sreehari
+>>> sreehari.connect("github")
+    GET /users/kasreehari15/repos → 200
+    repositories ......... 5
+    languages ............ Python, Jupyter Notebook, Java
+>>>
+```
+
+Those numbers are read off the response. Open devtools and the request is
+there. A cached response prints `200 (cache)`, a failure prints the real status
+or `offline`, and if the API is slow the screen prints `pending` and moves on
+rather than holding the visitor hostage — the wait is capped at 1.4 s.
+
+The side effect is the point: by the time the projects section is scrolled to,
+its data is already in hand, so it renders instantly instead of showing a
+second spinner.
+
+## Projects
+
+Cards are built from the GitHub API at runtime, so the section can never go
+stale — pushing a repo updates the portfolio.
+
+- Forks, archived repos, private repos and the profile-README repo are dropped.
+- Featured repos come first, then most-starred, then most recently pushed.
+- Each card shows the language (with its GitHub colour), stars, topics and the
+  last push date.
+- Responses are cached in `localStorage` for 30 minutes, so a visitor clicking
+  around never spends more than one request against the unauthenticated rate
+  limit.
+
+Every failure mode is handled with something honest rather than a broken grid:
+
+| Situation | What the visitor sees |
+| --- | --- |
+| Repos found | The cards |
+| No public repos yet | "They will appear here automatically as soon as the first one is pushed" |
+| Rate-limited or offline | A direct link to the repositories on GitHub |
+| `githubUsername` not set | A note pointing at `js/config.js` |
+
+Tune it in `js/config.js`:
+
+```js
+featuredRepos: ["digit-recogniser"],  // pin these first, in order
+hiddenRepos:   ["scratch-notes"],     // never show these
+maxProjects:   6                      // how many cards
+```
+
+## The custom cursor
+
+On pointer-fine devices the native cursor is hidden and replaced with a lagging
+ring and a fast dot. The ring is contextual:
+
+| Target | Behaviour |
+| --- | --- |
+| Any link or button | Ring grows and picks up the accent tint |
+| Buttons, contact links, cards, terminal, cube, panels | Ring fills with the accent and shows a one-word label — `go`, `open`, `tilt`, `spin`, `read` — and the dot hides |
+| Mouse down | Ring contracts |
+
+`cursor: none` is only applied once the script has confirmed the replacement is
+running, so a JS failure can never leave the page without a pointer. Touch
+devices and `prefers-reduced-motion` keep the native cursor.
+
+## Responsive
+
+Verified at 320, 390, 768, 1024, 1440 and 1920 px — no horizontal overflow at
+any width.
+
+| Breakpoint | What changes |
+| --- | --- |
+| ≥ 1600 px | Content column widens to 1360 px |
+| ≤ 1180 px | Cube scales down |
+| ≤ 1024 px | About and stack headers stack to one column; the terminal stops being sticky |
+| ≤ 820 px | Burger menu replaces nav links, stats go one-up, custom cursor off, horizontal rail becomes a native swipe carousel |
+| ≤ 560 px | Full-width buttons, tighter timeline, smaller cube |
+| ≤ 380 px | Tighter card and panel padding |
+| Short landscape | Full-height hero and pinned section relax to auto height |
+
+## Notes
+
+- GSAP 3.13 and Lenis 1.1 load from a CDN — no `npm install` needed.
+- `prefers-reduced-motion` is respected: smooth scrolling, the canvas, the
+  pinning, the custom cursor and every reveal are all skipped, and the content
+  renders plainly.
+- Without JavaScript the page still renders in full (there's a `<noscript>`
+  fallback), it just doesn't animate.
+- Everything is keyboard navigable and focus rings stay visible.
+
+---
+
+Built with [GSAP](https://gsap.com) and [Lenis](https://lenis.darkroom.engineering).
