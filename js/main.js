@@ -328,6 +328,7 @@
     if (REDUCED) return;
     const title = $(".hero__title");
     heroChars = title ? splitChars(title) : [];
+    if (title && heroChars.length) title.classList.add("is-split");
     alignTitleGradient();
     gsap.set(heroChars, { yPercent: 115, opacity: 0 });
     gsap.set([".hero__hi", ".hero__blurb", ".hero__actions"], { y: 26, opacity: 0 });
@@ -338,7 +339,10 @@
 
   function heroIntro() {
     if (REDUCED) return;
-    const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+    const tl = gsap.timeline({
+      defaults: { ease: "power4.out" },
+      onComplete: () => gsap.set(heroChars, { willChange: "auto" })
+    });
 
     tl.to(".nav", { y: 0, opacity: 1, duration: 0.9 }, 0)
       .to(".hero__hi", { y: 0, opacity: 1, duration: 0.8 }, 0.15)

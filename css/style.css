@@ -297,6 +297,15 @@ body.has-cursor * { cursor: none; }
   color: transparent;
   margin-bottom: 0.5rem;
 }
+/* Once JS splits the title the characters carry the gradient themselves, so the
+   parent must stop painting its own — two clipped backgrounds on a composited
+   layer leaves repaint artifacts on some Android GPUs. */
+.hero__title.is-split {
+  background-image: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+}
+
 /* Transformed children escape the parent's background-clip, so every character
    carries its own slice of the same gradient (offsets are set in main.js). */
 .hero__title .char {
@@ -675,7 +684,6 @@ body.has-cursor * { cursor: none; }
 }
 
 @media (max-width: 560px) {
-  .hero__actions .btn { flex: 1 1 100%; }
   .timeline { padding-left: 24px; }
   .tl__dot { left: -24px; }
   .cube-stage { width: 140px; height: 140px; }
@@ -691,6 +699,10 @@ body.has-cursor * { cursor: none; }
 }
 
 /* very small phones */
+@media (max-width: 400px) {
+  .hero__actions .btn { flex: 1 1 100%; }
+}
+
 @media (max-width: 380px) {
   .panel { padding: 1.8rem 1.4rem; }
   .card { padding: 1.6rem 1.3rem; }
