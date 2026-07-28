@@ -132,6 +132,28 @@ js/main.js        Lenis setup, custom cursor, and every GSAP animation
 | Contact | Headline characters flip up out of 3D space |
 | Everywhere | Custom cursor, magnetic buttons, scroll progress bar, auto-hiding nav |
 
+## Icons
+
+There are no emoji anywhere in the UI. Every icon is a line icon in a single
+inline `<svg class="sprite">` at the top of `index.html`, referenced with
+`<use href="#i-name">` — one definition, reused wherever it appears.
+
+| Symbol | Replaces | Used for |
+| --- | --- | --- |
+| `#i-wave` | 👋 | Hero greeting |
+| `#i-cap` | 🎓 | B.Tech Computer Science & Engineering |
+| `#i-code` | 💻 | Aspiring Software Engineer |
+| `#i-chip` | 🤖 | Passionate about Artificial Intelligence |
+| `#i-terminal` | 🐍 | Learning Python & CS fundamentals |
+| `#i-sprout` | 🌱 | Always curious, always building |
+| `#i-spark` | ✳ | Marquee separators |
+| `#i-arrow-up` | ↑ | Back to top |
+
+All drawn on a 24 px grid with a 1.7 stroke and round caps, so the set reads as
+one family. They inherit `currentColor`, so they recolour with their context
+and need no separate dark/light variants. The favicon is a drawn `</>` mark
+rather than an emoji glyph, so it renders identically on every platform.
+
 ## The custom cursor
 
 On pointer-fine devices the native cursor is hidden and replaced with a lagging
