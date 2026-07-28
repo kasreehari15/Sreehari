@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Sreehari — B.Tech CSE Student &amp; Aspiring Software Engineer</title>
 <meta name="description" content="Portfolio of Sreehari — B.Tech Computer Science student, aspiring software engineer, and AI &amp; Machine Learning enthusiast." />
-<meta name="theme-color" content="#0b0e18" />
+<meta name="theme-color" content="#070a12" />
 
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Sreehari — Aspiring Software Engineer" />
@@ -13,9 +13,9 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css" />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#128187;</text></svg>" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#129302;</text></svg>" />
 
 <noscript>
   <style>
@@ -84,31 +84,206 @@
     <div class="hero__glow" aria-hidden="true"></div>
 
     <div class="hero__inner">
-      <p class="hero__hi" data-reveal>
-        <span class="wave">👋</span> Hi, I'm
-      </p>
+      <div class="hero__copy">
+        <p class="hero__hi" data-reveal>
+          <span class="wave">👋</span> Hi, I'm
+        </p>
 
-      <h1 class="hero__title" data-split="chars">Sreehari</h1>
+        <h1 class="hero__title" data-split="chars">Sreehari</h1>
 
-      <div class="hero__roles">
-        <span class="mono hero__prompt">&gt;</span>
-        <span class="hero__rotator" id="rotator" aria-live="polite"></span>
-        <span class="hero__caret" aria-hidden="true"></span>
+        <div class="hero__roles">
+          <span class="mono hero__prompt">&gt;</span>
+          <span class="hero__rotator" id="rotator" aria-live="polite"></span>
+          <span class="hero__caret" aria-hidden="true"></span>
+        </div>
+
+        <p class="hero__blurb" data-reveal>
+          B.Tech Computer Science student learning in public — writing Python,
+          chasing fundamentals, and building toward a career in
+          <em>Artificial Intelligence</em> &amp; <em>Machine Learning</em>.
+        </p>
+
+        <div class="hero__actions" data-reveal>
+          <a class="btn btn--primary magnetic" href="#contact" data-scroll-to="#contact">
+            <span>Get in touch</span>
+          </a>
+          <a class="btn btn--ghost magnetic" href="#about" data-scroll-to="#about">
+            <span>About me</span>
+          </a>
+        </div>
       </div>
 
-      <p class="hero__blurb" data-reveal>
-        B.Tech Computer Science student learning in public — writing Python,
-        chasing fundamentals, and building toward a career in
-        <em>Artificial Intelligence</em> &amp; <em>Machine Learning</em>.
-      </p>
+      <!-- ── mascot: a stylised avatar of Sreehari ── -->
+      <div class="hero__stage">
+        <div class="mascot" id="mascot" aria-hidden="true">
+          <div class="mascot__glow"></div>
 
-      <div class="hero__actions" data-reveal>
-        <a class="btn btn--primary magnetic" href="#contact" data-scroll-to="#contact">
-          <span>Get in touch</span>
-        </a>
-        <a class="btn btn--ghost magnetic" href="#about" data-scroll-to="#about">
-          <span>About me</span>
-        </a>
+          <div class="mascot__tilt" id="mascotTilt">
+            <div class="mascot__ring"></div>
+
+            <svg class="mascot__svg" viewBox="0 0 320 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="avSkin" x1="108" y1="86" x2="220" y2="250" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#d89e71" />
+                  <stop offset="1" stop-color="#b0733f" />
+                </linearGradient>
+                <linearGradient id="avSkinDark" x1="130" y1="230" x2="190" y2="310" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#b57b4d" />
+                  <stop offset="1" stop-color="#96613a" />
+                </linearGradient>
+                <linearGradient id="avHair" x1="86" y1="52" x2="240" y2="215" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#2b231d" />
+                  <stop offset="1" stop-color="#0d0a08" />
+                </linearGradient>
+                <linearGradient id="avShirt" x1="50" y1="292" x2="280" y2="400" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#e9edf3" />
+                  <stop offset="1" stop-color="#aeb6c5" />
+                </linearGradient>
+                <radialGradient id="avHalo" cx="50%" cy="50%" r="50%">
+                  <stop stop-color="#00c2ff" stop-opacity=".26" />
+                  <stop offset="1" stop-color="#00c2ff" stop-opacity="0" />
+                </radialGradient>
+                <clipPath id="clipEyeL"><ellipse cx="134" cy="167" rx="13" ry="8.4" /></clipPath>
+                <clipPath id="clipEyeR"><ellipse cx="186" cy="167" rx="13" ry="8.4" /></clipPath>
+                <clipPath id="clipShirt">
+                  <path d="M30 400c2-58 30-90 78-102l52 26 52-26c48 12 76 44 78 102z" />
+                </clipPath>
+                <clipPath id="clipHead">
+                  <path d="M101 158C101 112 122 86 160 86s59 26 59 72c0 28-7 50-25 70-12 13-23 19-34 19s-22-6-34-19c-18-20-25-42-25-70Z" />
+                </clipPath>
+              </defs>
+
+              <ellipse cx="160" cy="170" rx="150" ry="150" fill="url(#avHalo)" />
+
+              <g id="avFigure">
+                <!-- ── shoulders + shirt ── -->
+                <g id="avBody">
+                  <path d="M137 230q23 15 46 0v56h-46z" fill="url(#avSkinDark)" />
+                  <path d="M137 230q23 15 46 0v22q-23 14-46 0z" fill="#8d5a33" opacity=".55" />
+
+                  <path d="M30 400c2-58 30-90 78-102l52 26 52-26c48 12 76 44 78 102z" fill="url(#avShirt)" />
+                  <path d="M133 280 160 330 187 280q-27-10-54 0z" fill="url(#avSkinDark)" />
+                  <path d="M108 282q14-8 25-2l27 50-44-18z" fill="#ccd3de" />
+                  <path d="M212 282q-14-8-25-2l-27 50 44-18z" fill="#ccd3de" />
+                  <g stroke="#9aa3b4" stroke-width="1.4" opacity=".45" clip-path="url(#clipShirt)">
+                    <path d="M74 306v94M92 296v104M242 296v104M226 306v94M126 338v62M194 338v62" />
+                  </g>
+                  <path d="M136 278q24 30 48 0" fill="none" stroke="#eef2ff" stroke-width="2.6" stroke-linecap="round" opacity=".9" />
+                </g>
+
+                <!-- ── head ── -->
+                <g id="avHead">
+                  <!-- curly hair: overlapping clumps build a textured silhouette -->
+                  <g fill="url(#avHair)">
+                    <ellipse cx="160" cy="112" rx="64" ry="58" />
+                    <circle cx="96"  cy="118" r="26" />
+                    <circle cx="100" cy="99"  r="27" />
+                    <circle cx="111" cy="82"  r="26" />
+                    <circle cx="128" cy="70"  r="28" />
+                    <circle cx="149" cy="63"  r="27" />
+                    <circle cx="171" cy="63"  r="28" />
+                    <circle cx="192" cy="70"  r="27" />
+                    <circle cx="209" cy="82"  r="26" />
+                    <circle cx="220" cy="99"  r="27" />
+                    <circle cx="224" cy="118" r="25" />
+                    <circle cx="98"  cy="136" r="20" />
+                    <circle cx="222" cy="136" r="20" />
+                  </g>
+
+                  <ellipse cx="101" cy="174" rx="10" ry="16" fill="url(#avSkin)" />
+                  <ellipse cx="219" cy="174" rx="10" ry="16" fill="url(#avSkin)" />
+                  <path d="M99 170q6 4 3 12M221 170q-6 4-3 12" stroke="#a06c42" stroke-width="1.8" fill="none" stroke-linecap="round" />
+
+                  <path d="M101 158C101 112 122 86 160 86s59 26 59 72c0 28-7 50-25 70-12 13-23 19-34 19s-22-6-34-19c-18-20-25-42-25-70Z" fill="url(#avSkin)" />
+
+                  <g clip-path="url(#clipHead)">
+                    <path d="M219 96v150l24-20V96z" fill="#8d5a33" opacity=".35" />
+                    <path d="M160 214q10 8 22 4-12 12-22 12t-22-12q12 4 22-4Z" fill="#a86c42" opacity=".25" />
+                  </g>
+
+                  <!-- curly fringe sitting over the forehead -->
+                  <g fill="url(#avHair)">
+                    <circle cx="110" cy="130" r="15" />
+                    <circle cx="127" cy="115" r="17" />
+                    <circle cx="150" cy="102" r="18" />
+                    <circle cx="174" cy="101" r="18" />
+                    <circle cx="196" cy="112" r="17" />
+                    <circle cx="212" cy="129" r="15" />
+                    <circle cx="104" cy="148" r="11" />
+                    <circle cx="216" cy="148" r="11" />
+                  </g>
+                  <!-- curl texture, scattered across the whole mass -->
+                  <g fill="none" stroke="#514336" stroke-linecap="round" opacity=".5">
+                    <g stroke-width="2.8">
+                      <path d="M118 58q8-9 16-1 6 7-2 13" />
+                      <path d="M148 44q8-9 16-1 6 7-2 13" />
+                      <path d="M180 46q8-9 16-1 6 7-2 13" />
+                      <path d="M98 88q8-9 16-1 6 7-2 13" />
+                      <path d="M130 70q8-9 16-1 6 7-2 13" />
+                      <path d="M164 58q8-9 16-1 6 7-2 13" />
+                      <path d="M198 66q8-9 16-1 6 7-2 13" />
+                      <path d="M220 92q8-9 16-1 6 7-2 13" />
+                      <path d="M82 112q8-9 16-1 6 7-2 13" />
+                    </g>
+                    <g stroke-width="2.3">
+                      <path d="M110 104q6-7 12-1 4 5-2 9" />
+                      <path d="M142 96q6-7 12-1 4 5-2 9" />
+                      <path d="M172 90q6-7 12-1 4 5-2 9" />
+                      <path d="M200 100q6-7 12-1 4 5-2 9" />
+                      <path d="M226 122q6-7 12-1 4 5-2 9" />
+                      <path d="M86 138q6-7 12-1 4 5-2 9" />
+                      <path d="M120 124q6-7 12-1 4 5-2 9" />
+                      <path d="M188 118q6-7 12-1 4 5-2 9" />
+                    </g>
+                  </g>
+
+                  <!-- brows -->
+                  <path id="browL" d="M117 150q18-10 35-2" stroke="#181310" stroke-width="6" fill="none" stroke-linecap="round" />
+                  <path id="browR" d="M168 148q17-8 35 2" stroke="#181310" stroke-width="6" fill="none" stroke-linecap="round" />
+
+                  <!-- eyes -->
+                  <g id="avEyes">
+                    <g clip-path="url(#clipEyeL)">
+                      <ellipse cx="134" cy="167" rx="13" ry="8.4" fill="#f7f3ea" />
+                      <g class="eyeball">
+                        <circle cx="134" cy="167" r="6.4" fill="#4a3325" />
+                        <circle cx="134" cy="167" r="2.9" fill="#140d08" />
+                        <circle cx="136.5" cy="164" r="1.9" fill="#fff" opacity=".95" />
+                      </g>
+                      <rect class="lid" x="119" y="141" width="30" height="18" fill="#c88a5c" />
+                    </g>
+                    <g clip-path="url(#clipEyeR)">
+                      <ellipse cx="186" cy="167" rx="13" ry="8.4" fill="#f7f3ea" />
+                      <g class="eyeball">
+                        <circle cx="186" cy="167" r="6.4" fill="#4a3325" />
+                        <circle cx="186" cy="167" r="2.9" fill="#140d08" />
+                        <circle cx="188.5" cy="164" r="1.9" fill="#fff" opacity=".95" />
+                      </g>
+                      <rect class="lid" x="171" y="141" width="30" height="18" fill="#c88a5c" />
+                    </g>
+                    <path d="M121 167a13 8.4 0 0 1 26 0M173 167a13 8.4 0 0 1 26 0" fill="none" stroke="#2a1c13" stroke-width="2" stroke-linecap="round" />
+                  </g>
+
+                  <!-- nose + mouth -->
+                  <path d="M160 176v18q0 5-5 7" stroke="#a06c42" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M152 203q8 4 15 0" stroke="#9a663d" stroke-width="2" fill="none" stroke-linecap="round" opacity=".7" />
+                  <path id="avMouth" d="M144 216q16 12 32 0" stroke="#8d4f3c" stroke-width="3.4" fill="none" stroke-linecap="round" />
+                  <path d="M150 228q10 5 20 0" stroke="#a06c42" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".55" />
+
+                  <!-- cyan rim light, traced along the right silhouette -->
+                  <path d="M218 152c1 28-6 50-24 70" fill="none" stroke="#00c2ff" stroke-width="2.4" stroke-linecap="round" opacity=".4" />
+                  <path d="M228 76c14 12 21 28 20 46" fill="none" stroke="#00c2ff" stroke-width="2.4" stroke-linecap="round" opacity=".3" />
+                </g>
+              </g>
+            </svg>
+
+            <div class="mascot__bits">
+              <span class="bit bit--1 mono">&lt;/&gt;</span>
+              <span class="bit bit--2 mono">{ }</span>
+              <span class="bit bit--3 mono">AI</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -139,7 +314,7 @@
     <div class="wrap about__grid">
 
       <div class="about__sticky">
-        <div class="terminal" data-reveal>
+        <div class="terminal tilt-3d" data-reveal>
           <div class="terminal__bar">
             <i></i><i></i><i></i>
             <span class="mono">sreehari — python3</span>
@@ -192,35 +367,64 @@
   <!-- ────────────────────────── stack ────────────────────────── -->
   <section class="section stack" id="stack">
     <div class="wrap">
-      <p class="eyebrow mono" data-reveal><span>02</span> — Tech stack</p>
-      <h2 class="h2 h2--center" data-split="lines">The tools I reach for</h2>
+      <div class="stack__head">
+        <div>
+          <p class="eyebrow mono" data-reveal><span>02</span> — Tech stack</p>
+          <h2 class="h2" data-split="lines">The tools I reach for</h2>
+          <p class="stack__lede" data-reveal>
+            A small toolkit, used properly. Everything here is something I actually
+            open on a normal day.
+          </p>
+        </div>
+
+        <!-- ── 3D cube ── -->
+        <div class="cube-stage" aria-hidden="true">
+          <div class="cube" id="cube">
+            <div class="cube__face cube__face--front"><span class="mono">Py</span></div>
+            <div class="cube__face cube__face--back"><span class="mono">Git</span></div>
+            <div class="cube__face cube__face--right"><span class="mono">GH</span></div>
+            <div class="cube__face cube__face--left"><span class="mono">VS</span></div>
+            <div class="cube__face cube__face--top"><span class="mono">AI</span></div>
+            <div class="cube__face cube__face--bottom"><span class="mono">&lt;/&gt;</span></div>
+          </div>
+          <div class="cube-stage__shadow"></div>
+        </div>
+      </div>
 
       <div class="cards" id="stackCards">
         <article class="card" data-card>
-          <div class="card__icon"><img src="https://skillicons.dev/icons?i=python" alt="" loading="lazy" width="48" height="48" /></div>
-          <h3>Python</h3>
-          <p>My daily driver — scripts, problem solving, and my first steps into ML.</p>
+          <div class="card__layer">
+            <div class="card__icon"><img src="https://skillicons.dev/icons?i=python" alt="" loading="lazy" width="48" height="48" /></div>
+            <h3>Python</h3>
+            <p>My daily driver — scripts, problem solving, and my first steps into ML.</p>
+          </div>
           <span class="card__idx mono">01</span>
         </article>
 
         <article class="card" data-card>
-          <div class="card__icon"><img src="https://skillicons.dev/icons?i=git" alt="" loading="lazy" width="48" height="48" /></div>
-          <h3>Git</h3>
-          <p>Branch, commit, review. Version control as a habit, not an afterthought.</p>
+          <div class="card__layer">
+            <div class="card__icon"><img src="https://skillicons.dev/icons?i=git" alt="" loading="lazy" width="48" height="48" /></div>
+            <h3>Git</h3>
+            <p>Branch, commit, review. Version control as a habit, not an afterthought.</p>
+          </div>
           <span class="card__idx mono">02</span>
         </article>
 
         <article class="card" data-card>
-          <div class="card__icon"><img src="https://skillicons.dev/icons?i=github" alt="" loading="lazy" width="48" height="48" /></div>
-          <h3>GitHub</h3>
-          <p>Where the learning lives in public — and where open source starts.</p>
+          <div class="card__layer">
+            <div class="card__icon"><img src="https://skillicons.dev/icons?i=github" alt="" loading="lazy" width="48" height="48" /></div>
+            <h3>GitHub</h3>
+            <p>Where the learning lives in public — and where open source starts.</p>
+          </div>
           <span class="card__idx mono">03</span>
         </article>
 
         <article class="card" data-card>
-          <div class="card__icon"><img src="https://skillicons.dev/icons?i=vscode" alt="" loading="lazy" width="48" height="48" /></div>
-          <h3>VS Code</h3>
-          <p>Editor of choice. Dark theme, split panes, far too many extensions.</p>
+          <div class="card__layer">
+            <div class="card__icon"><img src="https://skillicons.dev/icons?i=vscode" alt="" loading="lazy" width="48" height="48" /></div>
+            <h3>VS Code</h3>
+            <p>Editor of choice. Dark theme, split panes, far too many extensions.</p>
+          </div>
           <span class="card__idx mono">04</span>
         </article>
       </div>

@@ -333,6 +333,7 @@
     gsap.set([".hero__hi", ".hero__blurb", ".hero__actions"], { y: 26, opacity: 0 });
     gsap.set([".hero__roles", ".hero__scroll"], { opacity: 0 });
     gsap.set(".nav", { y: -70, opacity: 0 });
+    gsap.set(".hero__stage", { opacity: 0, scale: 0.86, rotationY: -22, z: -180 });
   }
 
   function heroIntro() {
@@ -349,7 +350,12 @@
       .to(".hero__roles", { opacity: 1, duration: 0.7 }, 0.75)
       .to(".hero__blurb", { y: 0, opacity: 1, duration: 0.9 }, 0.85)
       .to(".hero__actions", { y: 0, opacity: 1, duration: 0.9 }, 0.95)
-      .to(".hero__scroll", { opacity: 1, duration: 0.8 }, 1.1);
+      .to(".hero__scroll", { opacity: 1, duration: 0.8 }, 1.1)
+      .to(
+        ".hero__stage",
+        { opacity: 1, scale: 1, rotationY: 0, z: 0, duration: 1.5, ease: "power3.out" },
+        0.35
+      );
 
     /* waving hand */
     gsap.to(".wave", {
@@ -413,6 +419,191 @@
   }
 
   /* ══════════════════════════════════════════════════════════
+     7b. Mascot — a stylised avatar of Sreehari that blinks,
+         breathes, follows the pointer and tilts in 3D.
+     ══════════════════════════════════════════════════════════ */
+  function initMascot() {
+    const mascot = $("#mascot");
+    if (!mascot) return;
+
+    const tilt = $("#mascotTilt");
+    const head = $("#avHead");
+    const figure = $("#avFigure");
+    const lids = $$(".mascot .lid");
+    const eyeballs = $$(".mascot .eyeball");
+    const bits = $$(".mascot__bits .bit");
+    const brows = [$("#browL"), $("#browR")].filter(Boolean);
+
+    /* the SVG is scaled by CSS, so animate in the SVG's own user units */
+    gsap.set(lids, { y: -19 });
+
+    if (REDUCED) return;
+
+    /* breathing: the body drifts, the head drifts a touch more */
+    gsap.to(figure, { y: 5, duration: 2.6, repeat: -1, yoyo: true, ease: "sine.inOut" });
+    gsap.to(head, { y: -4, rotation: 0.7, transformOrigin: "160px 250px", duration: 3.4, repeat: -1, yoyo: true, ease: "sine.inOut" });
+
+    /* floating code bits, each on its own rhythm */
+    bits.forEach((bit, i) => {
+      gsap.to(bit, {
+        y: i % 2 ? 14 : -14,
+        x: i === 1 ? -8 : 6,
+        duration: 3 + i * 0.7,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: i * 0.4
+      });
+    });
+
+    /* blinking — irregular, occasionally a double blink */
+    const blink = () => {
+      const tl = gsap.timeline({
+        onComplete: () => gsap.delayedCall(gsap.utils.random(2.4, 6.5), blink)
+      });
+      tl.to(lids, { y: 0, duration: 0.07, ease: "power2.in" })
+        .to(lids, { y: -19, duration: 0.11, ease: "power2.out" });
+
+      if (Math.random() < 0.28) {
+        tl.to(lids, { y: 0, duration: 0.07, ease: "power2.in" }, "+=0.1")
+          .to(lids, { y: -19, duration: 0.11, ease: "power2.out" });
+      }
+    };
+    gsap.delayedCall(1.6, blink);
+
+    /* pointer tracking: eyes, 3D head tilt, and parallax on the bits */
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+
+    const eyeX = gsap.quickTo(eyeballs, "x", { duration: 0.7, ease: "power3" });
+    const eyeY = gsap.quickTo(eyeballs, "y", { duration: 0.7, ease: "power3" });
+    const rotY = gsap.quickTo(tilt, "rotationY", { duration: 1, ease: "power3" });
+    const rotX = gsap.quickTo(tilt, "rotationX", { duration: 1, ease: "power3" });
+
+    window.addEventListener(
+      "mousemove",
+      (e) => {
+        const box = mascot.getBoundingClientRect();
+        if (!box.width) return;
+        const cx = box.left + box.width / 2;
+        const cy = box.top + box.height * 0.42;
+
+        /* -1 … 1 either side of the mascot */
+        const dx = gsap.utils.clamp(-1, 1, (e.clientX - cx) / (window.innerWidth / 2));
+        const dy = gsap.utils.clamp(-1, 1, (e.clientY - cy) / (window.innerHeight / 2));
+
+        eyeX(dx * 4.5);
+        eyeY(dy * 3);
+        rotY(dx * 13);
+        rotX(-dy * 9);
+      },
+      { passive: true }
+    );
+
+    /* he perks up when you point at him */
+    mascot.addEventListener("mouseenter", () => {
+      gsap.to("#avMouth", { attr: { d: "M142 214q18 17 36 0" }, duration: 0.35, ease: "back.out(2)" });
+      gsap.to(brows, { y: -3, duration: 0.35, ease: "back.out(2)" });
+      gsap.to(tilt, { scale: 1.03, duration: 0.5, ease: "power3.out" });
+    });
+    mascot.addEventListener("mouseleave", () => {
+      gsap.to("#avMouth", { attr: { d: "M144 216q16 12 32 0" }, duration: 0.4 });
+      gsap.to(brows, { y: 0, duration: 0.4 });
+      gsap.to(tilt, { scale: 1, duration: 0.5, ease: "power3.out" });
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     7c. 3D — rotating cube, card tilt, depth on scroll
+     ══════════════════════════════════════════════════════════ */
+  function init3D() {
+    /* ── the tech cube keeps turning, and scroll spins it faster ── */
+    const cube = $("#cube");
+    if (cube) {
+      gsap.set(cube, { rotationX: -22, rotationY: 32 });
+
+      if (!REDUCED) {
+        const spin = gsap.to(cube, {
+          rotationY: "+=360",
+          duration: 16,
+          repeat: -1,
+          ease: "none"
+        });
+        gsap.to(cube, {
+          rotationX: 18,
+          duration: 7,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut"
+        });
+        ScrollTrigger.create({
+          trigger: "#stack",
+          start: "top bottom",
+          end: "bottom top",
+          onUpdate: (self) => {
+            spin.timeScale(1 + Math.min(Math.abs(self.getVelocity()) / 420, 6));
+          }
+        });
+      }
+    }
+
+    if (REDUCED) return;
+
+    /* ── stack cards tilt toward the pointer, contents float above ── */
+    if (window.matchMedia("(pointer: fine)").matches) {
+      $$(".card").forEach((card) => {
+        const rx = gsap.quickTo(card, "rotationX", { duration: 0.6, ease: "power3" });
+        const ry = gsap.quickTo(card, "rotationY", { duration: 0.6, ease: "power3" });
+        const rz = gsap.quickTo(card, "z", { duration: 0.6, ease: "power3" });
+
+        card.addEventListener("mousemove", (e) => {
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          rx(-py * 16);
+          ry(px * 16);
+          rz(30);
+          card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+          card.style.setProperty("--my", `${e.clientY - r.top}px`);
+        });
+        card.addEventListener("mouseleave", () => {
+          rx(0);
+          ry(0);
+          rz(0);
+        });
+      });
+
+      /* ── the terminal card gets the same treatment ── */
+      $$(".tilt-3d").forEach((el) => {
+        const rx = gsap.quickTo(el, "rotationX", { duration: 0.7, ease: "power3" });
+        const ry = gsap.quickTo(el, "rotationY", { duration: 0.7, ease: "power3" });
+        el.addEventListener("mousemove", (e) => {
+          const r = el.getBoundingClientRect();
+          rx(-((e.clientY - r.top) / r.height - 0.5) * 10);
+          ry(((e.clientX - r.left) / r.width - 0.5) * 12);
+        });
+        el.addEventListener("mouseleave", () => {
+          rx(0);
+          ry(0);
+        });
+      });
+    }
+
+    /* ── goal cards swing in on a hinge ── */
+    $$("[data-tl]").forEach((item) => {
+      gsap.from(item, {
+        rotationX: -55,
+        y: 40,
+        opacity: 0,
+        transformOrigin: "top center",
+        duration: 1,
+        ease: "power3.out",
+        immediateRender: true,
+        scrollTrigger: { trigger: item, start: "top 88%", once: true }
+      });
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════
      8. Generic scroll reveals
      ══════════════════════════════════════════════════════════ */
   function initReveals() {
@@ -463,10 +654,13 @@
       const chars = splitChars(contactTitle);
       gsap.from(chars, {
         yPercent: 110,
+        rotationX: -80,
+        z: -140,
         opacity: 0,
-        duration: 1,
+        duration: 1.1,
         stagger: 0.03,
         ease: "power4.out",
+        transformOrigin: "50% 100%",
         immediateRender: true,
         scrollTrigger: { trigger: contactTitle, start: "top 85%", once: true }
       });
@@ -556,6 +750,21 @@
       /* pin the whole section so the heading stays put while the cards travel */
       const distance = () => Math.max(0, track.scrollWidth - window.innerWidth + 40);
 
+      /* cards turn away from centre as they travel — a real 3D carousel */
+      const panels = $$(".panel", track);
+      const turnPanels = () => {
+        const mid = window.innerWidth / 2;
+        panels.forEach((panel) => {
+          const r = panel.getBoundingClientRect();
+          const offset = gsap.utils.clamp(-1, 1, (r.left + r.width / 2 - mid) / mid);
+          gsap.set(panel, {
+            rotationY: offset * -22,
+            z: -Math.abs(offset) * 90,
+            opacity: 1 - Math.abs(offset) * 0.25
+          });
+        });
+      };
+
       const tween = gsap.to(track, {
         x: () => -distance(),
         ease: "none",
@@ -566,7 +775,9 @@
           pin: section,
           scrub: 0.8,
           invalidateOnRefresh: true,
-          anticipatePin: 1
+          anticipatePin: 1,
+          onUpdate: REDUCED ? undefined : turnPanels,
+          onRefresh: REDUCED ? undefined : turnPanels
         }
       });
 
@@ -613,14 +824,8 @@
       scrollTrigger: { trigger: list, start: "top 65%", end: "bottom 75%", scrub: 0.5 }
     });
 
+    /* the entrance animation for each goal lives in init3D (hinge swing) */
     $$("[data-tl]").forEach((item) => {
-      gsap.from(item, {
-        y: 44,
-        opacity: 0,
-        duration: 0.9,
-        immediateRender: true,
-        scrollTrigger: { trigger: item, start: "top 88%", once: true }
-      });
       ScrollTrigger.create({
         trigger: item,
         start: "top 72%",
@@ -726,14 +931,6 @@
       });
     });
 
-    /* card spotlight follows the pointer */
-    $$(".card").forEach((card) => {
-      card.addEventListener("mousemove", (e) => {
-        const r = card.getBoundingClientRect();
-        card.style.setProperty("--mx", `${e.clientX - r.left}px`);
-        card.style.setProperty("--my", `${e.clientY - r.top}px`);
-      });
-    });
   }
 
   /* ══════════════════════════════════════════════════════════
@@ -858,6 +1055,8 @@
     initTimeline();
     initPointer();
     initCanvas();
+    initMascot();
+    init3D();
 
     runPreloader().then(() => {
       if (lenis) {
